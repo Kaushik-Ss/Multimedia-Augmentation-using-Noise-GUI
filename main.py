@@ -85,7 +85,7 @@ class prism(QWidget):
         # main_container=Container(self)
         main_container=QHBoxLayout()
         # main_container.setDragEnabled(True)
-        main_container.addStretch()
+        # main_container.addStretch()
         
         self.photoViewer = ImageLabel()
         
@@ -145,7 +145,7 @@ class prism(QWidget):
         button_add.clicked.connect(self.add_image)
         
         title_v_box_op = QHBoxLayout()
-        title_v_box_op.addStretch()
+        # title_v_box_op.addStretch()
         title_v_box_op.addWidget(button_gen)
         title_v_box_op.addStretch()
         title_v_box_op.addWidget(button_add)
@@ -164,6 +164,7 @@ class prism(QWidget):
         
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
+        text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
         
         
@@ -201,6 +202,14 @@ class prism(QWidget):
         
         title_v_box.addLayout(title_v_box_op)        
         main_container.addLayout(title_v_box)
+        # main_container.setSpacing(0)
+        # title_v_box_op.setSpacing(0)
+        # title_v_box.setSpacing(0)
+        
+        # main_container.setMargin(0)
+        # title_v_box_op.setMargin(0)
+        # title_v_box.setMargin(0)
+        
         self.setLayout(main_container)
             
             
