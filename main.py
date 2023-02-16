@@ -224,6 +224,7 @@ class prism(QWidget):
         for i in self.selected:
             print(i,'selected')
             
+            
             #
             # call respective functions
             #
@@ -239,6 +240,9 @@ class prism(QWidget):
     def add_image(self):
         print('clicked')
         file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
+        # print(_)
+        print(file_name)    
+        
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
