@@ -1,7 +1,14 @@
 import random
 import cv2
   
-def add_noise(img):
+def add_noise(imagelocation):
+    # salt-and-pepper noise can
+    # be applied only to grayscale images
+    # Reading the color image in grayscale image
+    img = cv2.imread(imagelocation,cv2.IMREAD_GRAYSCALE)
+    
+    #Storing the image
+    # cv2.imwrite('salt-and-pepper-lena1.jpg',add_noise(img))
   
     # Getting the dimensions of the image
     row , col = img.shape
@@ -38,12 +45,4 @@ def add_noise(img):
           
     return img
   
-# salt-and-pepper noise can
-# be applied only to grayscale images
-# Reading the color image in grayscale image
-img = cv2.imread('easy learn image.jfif',
-                 cv2.IMREAD_GRAYSCALE)
-  
-#Storing the image
-cv2.imwrite('salt-and-pepper-lena1.jpg',
-            add_noise(img))
+
