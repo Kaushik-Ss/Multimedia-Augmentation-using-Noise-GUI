@@ -16,26 +16,6 @@ import functools
 # p = Pool(10)
 
 
-
-####
-# NEED TO ADD DRAG AND DROP INTO CONTAINER #####
-####
-# class Container(QHBoxLayout):
-    
-#     def __init__(self, title, parent):
-#         super().__init__(title, parent)
-#         self.setAcceptDrops(True)
-
-#     def dragEnterEvent(self, e):
-#         if e.mimeData().hasFormat('text/plain'):
-#             e.accept()
-#         else:
-#             e.ignore()
-
-#     def dropEvent(self, e):
-#         self.setText(e.mimeData().text())
-        
-
 class ImageLabel(QLabel):
     def __init__(self):
         super().__init__()
@@ -51,60 +31,47 @@ class ImageLabel(QLabel):
     def setPixmap(self, image):
         super().setPixmap(image)
 
-
-
-def salt():
-    print("hola")
-
 class prism(QWidget):
     noises=['Salt and pepper','Impulse']
     noise_dict={'noise_1':'Salt and pepper','noise_2':'Impulse'}
     noise_chkx=[]
 
- 
 
     selected=[]
+
+
+    def salt():
+        print('ssdasalt')
+    
+    def impulse():
+        print("Impulse")
+        
+
+
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
         self.setAcceptDrops(True)
         self.checked=[]
-        
-        # self.noises=[]
-        
         self.noise_chkx=[]
-        self.d={"Salt and pepper":salt()}
+        self.d={"Salt and pepper":self.salt(),"Impulse":self.impulse()}
         
 
     def intitalizeUI(self):	
-        # self.setGeometry(100,100,250,250)
         self.setWindowTitle('Image Augment')
         self.display()
         self.show()
     
         
     def display(self):
-        # text=QLabel(self)
-        # text.setText('Drag and Drop images to Agument')
-        # # text.move(105,15)
-        # text.setFont(QFont(families,10))
-        # main_container=Container(self)
         main_container=QHBoxLayout()
-        # main_container.setDragEnabled(True)
-        # main_container.addStretch()
-        
         self.photoViewer = ImageLabel()
-        
-        main_container.addWidget(self.photoViewer)
-        
-        
-        
+        main_container.addWidget(self.photoViewer)        
         scrollArea = QtWidgets.QScrollArea()
         scrollArea.setWidgetResizable(True)
         scrollAreaWidgetContents = QtWidgets.QWidget()
         grid_generated = QtWidgets.QGridLayout(scrollAreaWidgetContents)
         scrollArea.setWidget(scrollAreaWidgetContents)
-        # grid_generated.addWidget(scrollArea)
         
         folder_dir='images/'
         try:
@@ -113,22 +80,13 @@ class prism(QWidget):
             max_r=3
             r=0
             for image in os.listdir(folder_dir):
-                # print(image)
                 if (image.endswith(".jpg")):
                             name_image=os.path.join(folder_dir,image)
                             word_image=QLabel(self)
                             pixmap=QPixmap(name_image)
-                            # print(pixmap.size())
                             pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
                             word_image.setPixmap(pixmap)
                             
-                            # print(pixmap.size())
-                            # pixmap.resize(32,32)
-                            # word_image.resize(32,32)
-                            # print(word_image.width(),pixmap.width())
-                            # word_image.move(25,40)
-                            # main_container.addWidget(word_image)
-
                             grid_generated.addWidget(word_image,r,i)
                             i=i+1
                             if i==max_r:
@@ -154,7 +112,6 @@ class prism(QWidget):
         title_v_box_op.addStretch()
         
         title_v_box_op.setSpacing(60)
-        # self.setLayout(title_v_box_op)
         
         
         
@@ -162,7 +119,6 @@ class prism(QWidget):
         
         
         title_v_box = QVBoxLayout()
-        # title_v_box.addStretch()
         
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
@@ -172,19 +128,16 @@ class prism(QWidget):
         
         
         
-        noise_list=[]
-        ind=0
-        
-        
+        ind=0        
         noise_1=QCheckBox('Salt and pepper', self)
         noise_1.clicked.connect(self.add_to_generate)
         title_v_box.addWidget(noise_1)
-        # title_v_box.addStretch()
         
+
+
         noise_2=QCheckBox('Impulse', self)
         noise_2.clicked.connect(self.add_to_generate)
         title_v_box.addWidget(noise_2)
-        # title_v_box.addStretch()
         
         ###
         # TO DO: DYNAMICALLY ADD NOISES AND SLOT TO CHECKBOX
@@ -204,33 +157,20 @@ class prism(QWidget):
         
         title_v_box.addLayout(title_v_box_op)        
         main_container.addLayout(title_v_box)
-        # main_container.setSpacing(0)
-        # title_v_box_op.setSpacing(0)
-        # title_v_box.setSpacing(0)
-        
-        # main_container.setMargin(0)
-        # title_v_box_op.setMargin(0)
-        # title_v_box.setMargin(0)
         
         self.setLayout(main_container)
-            
-            
-        
-        
+                
         
 
-    def salt():
-        print('salt')
     
-    def pepper():
-        print("pepper")
-        
     def generate_image(self):
-        print('clicked')
+        # print('clicked')
         c=[]
         for i in self.selected:
-            print(self.d[i])
-            print(i,'selected')
+            # print(self.d[i])
+            self.d[i]
+            print(i,'function called')
+            # print(i,'selected')
             
             
             #
@@ -246,7 +186,7 @@ class prism(QWidget):
                 
             
     def add_image(self):
-        print('clicked')
+        # print('clicked')
         file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         # print(_)
         print(file_name)    
