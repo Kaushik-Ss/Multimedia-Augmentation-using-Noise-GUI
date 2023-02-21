@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QHBoxLayout,QFormLayout,QGri
 from multiprocessing import Pool
 from PyQt5 import QtWidgets
 import os
+import functools
 # p = Pool(10)
 
 
@@ -23,18 +24,15 @@ import os
     
 #     def __init__(self, title, parent):
 #         super().__init__(title, parent)
-
 #         self.setAcceptDrops(True)
 
 #     def dragEnterEvent(self, e):
-
 #         if e.mimeData().hasFormat('text/plain'):
 #             e.accept()
 #         else:
 #             e.ignore()
 
 #     def dropEvent(self, e):
-
 #         self.setText(e.mimeData().text())
         
 
@@ -54,17 +52,16 @@ class ImageLabel(QLabel):
         super().setPixmap(image)
 
 
+
 def salt():
     print("hola")
 
-d={"alt and pepper":salt}
 class prism(QWidget):
     noises=['Salt and pepper','Impulse']
     noise_dict={'noise_1':'Salt and pepper','noise_2':'Impulse'}
     noise_chkx=[]
 
-    d={}
-    d={"alt and pepper":salt}
+ 
 
     selected=[]
     def __init__(self):
@@ -76,7 +73,7 @@ class prism(QWidget):
         # self.noises=[]
         
         self.noise_chkx=[]
-        self.d={"Salt and pepper":salt}
+        self.d={"Salt and pepper":salt()}
         
 
     def intitalizeUI(self):	
@@ -91,7 +88,6 @@ class prism(QWidget):
         # text.setText('Drag and Drop images to Agument')
         # # text.move(105,15)
         # text.setFont(QFont(families,10))
-        
         # main_container=Container(self)
         main_container=QHBoxLayout()
         # main_container.setDragEnabled(True)
@@ -123,27 +119,24 @@ class prism(QWidget):
                             word_image=QLabel(self)
                             pixmap=QPixmap(name_image)
                             # print(pixmap.size())
-                            
                             pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
                             word_image.setPixmap(pixmap)
-                            # print(pixmap.size())
                             
+                            # print(pixmap.size())
                             # pixmap.resize(32,32)
                             # word_image.resize(32,32)
                             # print(word_image.width(),pixmap.width())
-                            
                             # word_image.move(25,40)
                             # main_container.addWidget(word_image)
+
                             grid_generated.addWidget(word_image,r,i)
-                            # print(i,r)
                             i=i+1
                             if i==max_r:
                                 r+=1
                                 i=0
             main_container.addWidget(scrollArea)
-            # main_container.addLayout(grid_generated)
         except Exception as e:
-            print("Image not found."+e.message)	        
+            print("Image not found."+e.message)        
         button_gen = QPushButton('Generate', self)
         
         #signal connect and self.generate_image is slots in pyqt5
@@ -155,7 +148,6 @@ class prism(QWidget):
         button_add.clicked.connect(self.add_image)
         
         title_v_box_op = QHBoxLayout()
-        # title_v_box_op.addStretch()
         title_v_box_op.addWidget(button_gen)
         title_v_box_op.addStretch()
         title_v_box_op.addWidget(button_add)
