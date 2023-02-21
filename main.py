@@ -53,10 +53,19 @@ class ImageLabel(QLabel):
     def setPixmap(self, image):
         super().setPixmap(image)
 
+
+def salt():
+    print("hola")
+
+d={"alt and pepper":salt}
 class prism(QWidget):
     noises=['Salt and pepper','Impulse']
     noise_dict={'noise_1':'Salt and pepper','noise_2':'Impulse'}
     noise_chkx=[]
+
+    d={}
+    d={"alt and pepper":salt}
+
     selected=[]
     def __init__(self):
         super().__init__()
@@ -67,6 +76,7 @@ class prism(QWidget):
         # self.noises=[]
         
         self.noise_chkx=[]
+        self.d={"Salt and pepper":salt}
         
 
     def intitalizeUI(self):	
@@ -216,12 +226,18 @@ class prism(QWidget):
         
         
         
-        
+
+    def salt():
+        print('salt')
+    
+    def pepper():
+        print("pepper")
         
     def generate_image(self):
         print('clicked')
         c=[]
         for i in self.selected:
+            print(self.d[i])
             print(i,'selected')
             
             
