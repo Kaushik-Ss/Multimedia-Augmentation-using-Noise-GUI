@@ -15,6 +15,12 @@ import os
 import functools
 # p = Pool(10)
 
+def salt(image):
+        print(image)
+    
+def impulse(image):
+        print(image)
+
 
 class ImageLabel(QLabel):
     def __init__(self):
@@ -40,11 +46,7 @@ class prism(QWidget):
     selected=[]
 
 
-    def salt():
-        print('ssdasalt')
     
-    def impulse():
-        print("Impulse")
         
 
 
@@ -54,7 +56,7 @@ class prism(QWidget):
         self.setAcceptDrops(True)
         self.checked=[]
         self.noise_chkx=[]
-        self.d={"Salt and pepper":self.salt(),"Impulse":self.impulse()}
+        self.d={"Salt and pepper":salt,"Impulse":impulse}
         
 
     def intitalizeUI(self):	
@@ -110,7 +112,6 @@ class prism(QWidget):
         title_v_box_op.addStretch()
         title_v_box_op.addWidget(button_add)
         title_v_box_op.addStretch()
-        
         title_v_box_op.setSpacing(60)
         
         
@@ -154,7 +155,6 @@ class prism(QWidget):
         # title_v_box.setSpacing(30)
         
         
-        
         title_v_box.addLayout(title_v_box_op)        
         main_container.addLayout(title_v_box)
         
@@ -166,9 +166,11 @@ class prism(QWidget):
     def generate_image(self):
         # print('clicked')
         c=[]
+        # for i in
         for i in self.selected:
             # print(self.d[i])
-            self.d[i]
+            # self.d[i]
+            print(functools.partial(self.d[i],image="hello"))
             print(i,'function called')
             # print(i,'selected')
             
