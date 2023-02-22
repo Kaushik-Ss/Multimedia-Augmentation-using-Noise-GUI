@@ -5,6 +5,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5 import *
 from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout
 from PyQt5.QtGui import QPixmap,QFont, QFontDatabase
+from PyQt5.QtCore import QUrl
+from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import *
 from PyQt5 import QtCore
@@ -38,13 +40,14 @@ class Project(QWidget):
         self.intitalizeUI()
         self.setAcceptDrops(True)
 
-    def intitalizeUI(self):	
+    def intitalizeUI(self): 
         self.setWindowTitle('Image Augment')
+
         noises=['Salt and pepper','Impulse']
         
         self.chkbxs=[]
         self.labels=[]
-
+        folder_dir='images/'
 
         main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
@@ -56,7 +59,6 @@ class Project(QWidget):
         grid_generated = QtWidgets.QGridLayout(scrollAreaWidgetContents)
         scrollArea.setWidget(scrollAreaWidgetContents)
         
-        folder_dir='images/'
         try:
             i=0
             c=0
@@ -70,7 +72,8 @@ class Project(QWidget):
                             pixmap=QPixmap(name_image)
                             pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
                             word_image.setPixmap(pixmap)
-                            
+                            # word_image.mousePressEvent = self.openImage(name_image)
+                            word_image.mousePressEvent = lambda event: self.openImage(name_image)
                             grid_generated.addWidget(word_image,r,i)
                             i=i+1
                             if i==max_r:
@@ -78,16 +81,15 @@ class Project(QWidget):
                                 i=0
             main_container.addWidget(scrollArea)
         except Exception as e:
-            print("Image not found.")        
+            print("Image not found.") 
+
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
-        
         button_gen.clicked.connect(self.submit)
         
 
         button_add = QPushButton('Add images', self)
         self.labels.append(button_add)
-        #signal connect and self.generate_image is slots in pyqt5
         button_add.clicked.connect(self.add_image)
         
         title_v_box_op = QHBoxLayout()
@@ -104,6 +106,7 @@ class Project(QWidget):
         self.labels.append(text_noise)
         text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
+        
 
         for label in noises:
                     checkbox = QCheckBox(label, self)
@@ -121,6 +124,7 @@ class Project(QWidget):
         self.styles()
         self.setLayout(main_container)
         self.show()
+
     
     def function1(self):
         print('Function 1 was called')
@@ -133,8 +137,8 @@ class Project(QWidget):
             if isinstance(widget, QCheckBox) and widget.isChecked():
                 label = widget.text()
                 self.checkbox_functions[label]()
-    def styles(self):
 
+    def styles(self):
         font_loc="fonts/GothamMedium_1.ttf"
         font_id = QFontDatabase.addApplicationFont(font_loc)
         font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
@@ -176,11 +180,13 @@ class Project(QWidget):
     def set_image(self, file_path):
         pixmap=QPixmap(file_path)
         pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.photoViewer.setPixmap(pixmap)
-	
+        # pixmap.mousePressEvent = self.openImage
+        # self.photoViewer.setPixmap(pixmap)
+    def openImage(self, file_dir):    # Open a file dialog to select an image file
+        QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	id = QFontDatabase.addApplicationFont("fonts/Cubano.ttf")	
-	families = QFontDatabase.applicationFontFamilies(id)[0]
-	window = Project()
-	sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    id = QFontDatabase.addApplicationFont("fonts/Cubano.ttf")   
+    families = QFontDatabase.applicationFontFamilies(id)[0]
+    window = Project()
+    sys.exit(app.exec_())
