@@ -15,12 +15,6 @@ import os
 import functools
 # p = Pool(10)
 
-def salt(image):
-        print(image)
-    
-def impulse(image):
-        print(image)
-
 
 class ImageLabel(QLabel):
     def __init__(self):
@@ -37,37 +31,24 @@ class ImageLabel(QLabel):
     def setPixmap(self, image):
         super().setPixmap(image)
 
-class prism(QWidget):
-    noises=['Salt and pepper','Impulse']
-    noise_dict={'noise_1':'Salt and pepper','noise_2':'Impulse'}
-    noise_chkx=[]
-
-
-    selected=[]
-
-
-    
-        
-
+class Project(QWidget):
 
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
         self.setAcceptDrops(True)
-        self.checked=[]
-        self.noise_chkx=[]
-        self.d={"Salt and pepper":salt,"Impulse":impulse}
-        
 
     def intitalizeUI(self):	
         self.setWindowTitle('Image Augment')
-        self.display()
-        self.show()
-    
+        noises=['Salt and pepper','Impulse']
         
-    def display(self):
+        self.chkbxs=[]
+        self.labels=[]
+
+
         main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
+        self.labels.append(self.photoViewer)
         main_container.addWidget(self.photoViewer)        
         scrollArea = QtWidgets.QScrollArea()
         scrollArea.setWidgetResizable(True)
@@ -85,6 +66,7 @@ class prism(QWidget):
                 if (image.endswith(".jpg")):
                             name_image=os.path.join(folder_dir,image)
                             word_image=QLabel(self)
+                            self.labels.append(word_image)
                             pixmap=QPixmap(name_image)
                             pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
                             word_image.setPixmap(pixmap)
@@ -96,14 +78,15 @@ class prism(QWidget):
                                 i=0
             main_container.addWidget(scrollArea)
         except Exception as e:
-            print("Image not found."+e.message)        
+            print("Image not found.")        
         button_gen = QPushButton('Generate', self)
+        self.labels.append(button_gen)
         
-        #signal connect and self.generate_image is slots in pyqt5
-        button_gen.clicked.connect(self.generate_image)
+        button_gen.clicked.connect(self.submit)
         
+
         button_add = QPushButton('Add images', self)
-        
+        self.labels.append(button_add)
         #signal connect and self.generate_image is slots in pyqt5
         button_add.clicked.connect(self.add_image)
         
@@ -114,85 +97,59 @@ class prism(QWidget):
         title_v_box_op.addStretch()
         title_v_box_op.setSpacing(60)
         
-        
-        
-        
-        
-        
-        title_v_box = QVBoxLayout()
-        
+    
+        title_v_box = QVBoxLayout()        
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
+        self.labels.append(text_noise)
         text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
-        
-        
-        
-        
-        ind=0        
-        noise_1=QCheckBox('Salt and pepper', self)
-        noise_1.clicked.connect(self.add_to_generate)
-        title_v_box.addWidget(noise_1)
-        
 
+        for label in noises:
+                    checkbox = QCheckBox(label, self)
+                    self.labels.append(checkbox)
+                    self.chkbxs.append(checkbox)
+                    title_v_box.addWidget(checkbox)
 
-        noise_2=QCheckBox('Impulse', self)
-        noise_2.clicked.connect(self.add_to_generate)
-        title_v_box.addWidget(noise_2)
-        
-        ###
-        # TO DO: DYNAMICALLY ADD NOISES AND SLOT TO CHECKBOX
-        ###
-        # for noise in self.noises:
-        #     noise_list.append(QCheckBox(noise, self))
-        #     print(noise_list,ind,noise_list[ind])
-        #     noise_list[ind].clicked.connect(lambda x:self.add_to_generate(noise_list[ind]))
-        #     self.noise_chkx.append(noise_list[ind])
-        #     title_v_box.addWidget(noise_list[ind])
-        #     print('added')
-        #     title_v_box.addStretch()
-        #     ind+=1
-        # title_v_box.setSpacing(30)
-        
-        
+        self.checkbox_functions = {}
+        self.checkbox_functions['Salt and pepper'] = self.function1
+        self.checkbox_functions['Impulse'] = self.function2
+
         title_v_box.addLayout(title_v_box_op)        
         main_container.addLayout(title_v_box)
         
+        self.styles()
         self.setLayout(main_container)
-                
-        
-
+        self.show()
     
-    def generate_image(self):
-        # print('clicked')
-        c=[]
-        # for i in
-        for i in self.selected:
-            # print(self.d[i])
-            # self.d[i]
-            print(functools.partial(self.d[i],image="hello"))
-            print(i,'function called')
-            # print(i,'selected')
-            
-            
-            #
-            # call respective functions
-            #
+    def function1(self):
+        print('Function 1 was called')
+
+    def function2(self):
+        print('Function 2 was called')
+
+    def submit(self):
+        for widget in self.chkbxs:
+            if isinstance(widget, QCheckBox) and widget.isChecked():
+                label = widget.text()
+                self.checkbox_functions[label]()
+    def styles(self):
+
+        font_loc="fonts/GothamMedium_1.ttf"
+        font_id = QFontDatabase.addApplicationFont(font_loc)
+        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        font = QFont(font_family)
+        font.setPointSize(8)
+        font.setItalic(True)
+        self.setStyleSheet('font-size: 16pt; font-family: {}; font-weight: italic;'.format(font_family))
+        for widget in self.labels:
+            widget.setFont(font)
             
         
-    def add_to_generate(self,state):
-        if state:
-            self.selected.append(self.sender().text())
-        else:
-            self.selected.remove(self.sender().text())
-                
-            
     def add_image(self):
-        # print('clicked')
         file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         # print(_)
-        print(file_name)    
-        
+        print(file_name)        
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -212,7 +169,6 @@ class prism(QWidget):
             event.setDropAction(Qt.CopyAction)
             file_path = event.mimeData().urls()[0].toLocalFile()
             self.set_image(file_path)
-
             event.accept()
         else:
             event.ignore()
@@ -221,11 +177,10 @@ class prism(QWidget):
         pixmap=QPixmap(file_path)
         pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
         self.photoViewer.setPixmap(pixmap)
-
 	
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	id = QFontDatabase.addApplicationFont("fonts/Cubano.ttf")	
 	families = QFontDatabase.applicationFontFamilies(id)[0]
-	window = prism()
+	window = Project()
 	sys.exit(app.exec_())
