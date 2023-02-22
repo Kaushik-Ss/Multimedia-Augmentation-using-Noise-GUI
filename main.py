@@ -42,6 +42,7 @@ class Project(QWidget):
 
     def intitalizeUI(self): 
         self.setWindowTitle('Image Augment')
+        self.addedimages=[]
 
         noises=['Salt and pepper','Impulse']
         
@@ -127,6 +128,7 @@ class Project(QWidget):
 
     
     def function1(self):
+        print(*self.addedimages)
         print('Function 1 was called')
 
     def function2(self):
@@ -151,9 +153,10 @@ class Project(QWidget):
             
         
     def add_image(self):
-        file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
+        self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         # print(_)
         print(file_name)        
+        self.addedimages.append(file_name)
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -178,10 +181,12 @@ class Project(QWidget):
             event.ignore()
 
     def set_image(self, file_path):
+        self.addedimages.append(file_path)
         pixmap=QPixmap(file_path)
+        print(file_path)
         pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
-        # pixmap.mousePressEvent = self.openImage
-        # self.photoViewer.setPixmap(pixmap)
+        pixmap.mousePressEvent = self.openImage
+        self.photoViewer.setPixmap(pixmap)
     def openImage(self, file_dir):    # Open a file dialog to select an image file
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 if __name__ == '__main__':
