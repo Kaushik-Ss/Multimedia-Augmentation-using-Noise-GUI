@@ -21,11 +21,11 @@ class ImageLabel(QLabel):
             }
         ''')
 
+
     def setPixmap(self, image):
         super().setPixmap(image)
 
 class Project(QWidget):
-
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
@@ -86,32 +86,36 @@ class Project(QWidget):
         
         title_v_box_op = QHBoxLayout()
         title_v_box_op.addWidget(button_gen)
-        title_v_box_op.addStretch()
+        # title_v_box_op.addStretch()
         title_v_box_op.addWidget(button_add)
-        title_v_box_op.addStretch()
-        title_v_box_op.setSpacing(60)
+        # title_v_box_op.addStretch()
+        # title_v_box_op.setSpacing(60)
         
     
         title_v_box = QVBoxLayout()        
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
         self.labels.append(text_noise)
-        text_noise.resize(100,100)
+        # text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
-        
+        # title_v_box.setStretchFactor(text_noise, 1)
+        # hbox.setStretchFactor(line_edit, 1
 
         for label in noises:
                     checkbox = QCheckBox(label, self)
                     self.labels.append(checkbox)
                     self.chkbxs.append(checkbox)
                     title_v_box.addWidget(checkbox)
+                    title_v_box.setStretchFactor(checkbox, 1)
 
         self.checkbox_functions = {}
         self.checkbox_functions['Salt and pepper'] = self.function1
         self.checkbox_functions['Impulse'] = self.function2
 
+
         title_v_box.addLayout(title_v_box_op)        
         main_container.addLayout(title_v_box)
+        main_container.setStretchFactor(title_v_box, 1)
         
         self.styles()
         self.setLayout(main_container)
@@ -146,7 +150,7 @@ class Project(QWidget):
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         # print(_)
-        print(file_name)        
+        print(self.file_name)        
         self.addedimages.append(file_name)
         
     def dragEnterEvent(self, event):
