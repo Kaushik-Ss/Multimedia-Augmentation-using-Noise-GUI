@@ -1,20 +1,11 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-from PyQt5 import *
-from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout
-from PyQt5.QtGui import QPixmap,QFont, QFontDatabase
-from PyQt5.QtCore import QUrl
-from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import *
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QApplication, QWidget, QHBoxLayout,QFormLayout,QGridLayout,QLineEdit)
-from multiprocessing import Pool
-from PyQt5 import QtWidgets
 import os
-import functools
+import sys
+
+from PyQt5.QtCore import Qt,QUrl
+from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
+from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
+from PyQt5 import QtCore,QtWidgets
+from multiprocessing import Pool
 # p = Pool(10)
 
 
