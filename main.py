@@ -186,6 +186,7 @@ class Project(QWidget):
         self.photoViewer.setPixmap(pixmap)
     def openImage(self, file_dir):    # Open a file dialog to select an image file
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     id = QFontDatabase.addApplicationFont("fonts/Cubano.ttf")   
