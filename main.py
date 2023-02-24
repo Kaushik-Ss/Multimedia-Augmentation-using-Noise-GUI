@@ -1,6 +1,13 @@
 import os
 import sys
 from noises.impulse import *
+from noises.anisotropic import *
+from noises.exponential import *
+from noises.flimgrain import *
+from noises.gamma import *
+from noises.gaussian import *
+# from noises.pepper import *
+# from noises.
 
 from PyQt5.QtCore import Qt,QUrl
 from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
@@ -36,7 +43,7 @@ class Project(QWidget):
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
 
-        noises=['Salt and pepper','Impulse']
+        noises=['Impulse','Gaussian','Periodic','Speckle','anisotropic','exponential','flimgrain','gamma','pepper','poisson','rayleigh','speckle','uniform']
         
         self.chkbxs=[]
         self.labels=[]
@@ -59,21 +66,21 @@ class Project(QWidget):
             r=0
             for image in os.listdir(folder_dir):
                 if (image.endswith(".jpg")):
-                            name_image=os.path.join(folder_dir,image)
-                            word_image=QLabel(self)
-                            self.labels.append(word_image)
-                            pixmap=QPixmap(name_image)
-                            # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
-                            pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-                            
-                            word_image.setPixmap(pixmap)
-                            # word_image.mousePressEvent = self.openImage(name_image)
-                            word_image.mousePressEvent = lambda event: self.openImage(name_image)
-                            grid_generated.addWidget(word_image,r,i)
-                            i=i+1
-                            if i==max_r:
-                                r+=1
-                                i=0
+                    name_image=os.path.join(folder_dir,image)
+                    word_image=QLabel(self)
+                    self.labels.append(word_image)
+                    pixmap=QPixmap(name_image)
+                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    
+                    word_image.setPixmap(pixmap)
+                    # word_image.mousePressEvent = self.openImage(name_image)
+                    word_image.mousePressEvent = lambda event: self.openImage(name_image)
+                    grid_generated.addWidget(word_image,r,i)
+                    i=i+1
+                    if i==max_r:
+                        r+=1
+                        i=0
             main_container.addWidget(scrollArea)
         except Exception as e:
             print("Image not found.") 
@@ -105,15 +112,15 @@ class Project(QWidget):
         # hbox.setStretchFactor(line_edit, 1
 
         for label in noises:
-                    checkbox = QCheckBox(label, self)
-                    self.labels.append(checkbox)
-                    self.chkbxs.append(checkbox)
-                    title_v_box.addWidget(checkbox)
-                    title_v_box.setStretchFactor(checkbox, 1)
+            checkbox = QCheckBox(label, self)
+            self.labels.append(checkbox)
+            self.chkbxs.append(checkbox)
+            title_v_box.addWidget(checkbox)
+            title_v_box.setStretchFactor(checkbox, 1)
 
         self.checkbox_functions = {}
-        self.checkbox_functions['Salt and pepper'] = self.saltandpepper
-        self.checkbox_functions['Impulse'] = self.function2
+        self.checkbox_functions['Impulse'] = self.impulse
+        self.checkbox_functions['anisotropic'] = self.anisotropic
 
 
         title_v_box.addLayout(title_v_box_op)        
@@ -125,8 +132,8 @@ class Project(QWidget):
         self.show()
 
     
-    def saltandpepper(self):
-        print(*self.addedimages)
+    def impulse(self):
+        # print(*self.addedimages)
         generatedimages = []
         print('Function 1 was called')
         for i in self.addedimages:
@@ -136,8 +143,16 @@ class Project(QWidget):
             cv2.imwrite('output/salt-and-pepper-lena1.jpg',i)
 
 
-    def function2(self):
-        print('Function 2 was called')
+    def anisotropic(self):
+        # print('Function 2 was called')
+        print(*self.addedimages)
+        generatedimages = []
+        print('Function 1 was called')
+        for i in self.addedimages:
+            generatedimages.append(anisotropic(i))
+        print(generatedimages)
+        for i in generatedimages:
+            cv2.imwrite('output/salt-and-pepper-lena1.jpg',i)
 
     def submit(self):
         for widget in self.chkbxs:
