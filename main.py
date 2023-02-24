@@ -62,7 +62,9 @@ class Project(QWidget):
                             word_image=QLabel(self)
                             self.labels.append(word_image)
                             pixmap=QPixmap(name_image)
-                            pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+                            # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+                            pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                            
                             word_image.setPixmap(pixmap)
                             # word_image.mousePressEvent = self.openImage(name_image)
                             word_image.mousePressEvent = lambda event: self.openImage(name_image)
@@ -151,7 +153,7 @@ class Project(QWidget):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         # print(_)
         print(self.file_name)        
-        self.addedimages.append(file_name)
+        self.addedimages.append(self.file_name)
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
