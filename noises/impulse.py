@@ -1,7 +1,7 @@
 import random
 import cv2
   
-def add_noise(imagelocation):
+def impulse(imagelocation):
     # salt-and-pepper noise can
     # be applied only to grayscale images
     # Reading the color image in grayscale image

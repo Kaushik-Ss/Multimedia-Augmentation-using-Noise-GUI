@@ -1,5 +1,6 @@
 import os
 import sys
+from noises.impulse import *
 
 from PyQt5.QtCore import Qt,QUrl
 from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
@@ -111,7 +112,7 @@ class Project(QWidget):
                     title_v_box.setStretchFactor(checkbox, 1)
 
         self.checkbox_functions = {}
-        self.checkbox_functions['Salt and pepper'] = self.function1
+        self.checkbox_functions['Salt and pepper'] = self.saltandpepper
         self.checkbox_functions['Impulse'] = self.function2
 
 
@@ -124,9 +125,14 @@ class Project(QWidget):
         self.show()
 
     
-    def function1(self):
+    def saltandpepper(self):
         print(*self.addedimages)
+        generatedimages = []
         print('Function 1 was called')
+        for i in self.addedimages:
+            generatedimages.append(impulse(i))
+        print(generatedimages)
+            
 
     def function2(self):
         print('Function 2 was called')
