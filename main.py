@@ -148,134 +148,87 @@ class Project(QWidget):
 
     
     def impulse(self):
-        # print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(impulse(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
 
 
     def anisotropic(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(anisotropic(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/anisotropic'+str(i+1)+'.jpg',generatedimages[i])
 
     def exponential(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(exponential(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/exponential'+str(i+1)+'.jpg',generatedimages[i])
 
     def flimgrain(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(flimgrain(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/flimgrain'+str(i+1)+'.jpg',generatedimages[i])
 
     def gamma(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(gamma(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/gamma'+str(i+1)+'.jpg',generatedimages[i])
 
     def gaussian(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(gaussian(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/gaussian'+str(i+1)+'.jpg',generatedimages[i])
 
     def pepper(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(pepper(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/pepper'+str(i+1)+'.jpg',generatedimages[i])
 
     def periodic(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(periodic(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/periodic'+str(i+1)+'.jpg',generatedimages[i])
 
     def poisson(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(poisson(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/poisson'+str(i+1)+'.jpg',generatedimages[i])
 
     def rayleigh(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(rayleigh(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/rayleigh'+str(i+1)+'.jpg',generatedimages[i])
 
     def speckle(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(speckle(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/speckle'+str(i+1)+'.jpg',generatedimages[i])
 
     def uniform(self):
-        # print('Function 2 was called')
-        print(*self.addedimages)
         generatedimages = []
-        print('Function 1 was called')
         for i in self.addedimages:
             generatedimages.append(uniformnoise(i))
-        print(generatedimages)
         for i in range(len(generatedimages)):
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
