@@ -7,4 +7,4 @@ def uniformnoise(imagelocation,attenuaterange):
         img.noise("uniform", attenuate = attenuaterange)
         # img.save(filename ="uniformnoise.jpeg")
 
-uniformnoise(r"C:\Users\fredd\Documents\GitHub\Prism-gui-image-augment\images\image-28.jpg",0.9)
+# uniformnoise(r"C:\Users\fredd\Documents\GitHub\Prism-gui-image-augment\images\image-28.jpg",0.9)

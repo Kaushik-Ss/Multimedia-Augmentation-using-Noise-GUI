@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import random
-def gaussian_func(imagelocation):
+def gaussian(imagelocation):
     image = cv2.imread(imagelocation)
     PEAK=1
     return np.random.normal(image / 30 * PEAK) / PEAK * 100

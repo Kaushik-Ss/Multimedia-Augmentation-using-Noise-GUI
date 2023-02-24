@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import random
-def exponential_func(image):
+def exponential(image):
     image = cv2.imread(image)
     PEAK=1
     return np.random.exponential(image / 255.0 * PEAK) / PEAK * 255

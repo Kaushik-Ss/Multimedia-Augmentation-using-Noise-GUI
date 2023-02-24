@@ -18,8 +18,8 @@ def anisotropic(imagelocation):
 
     # Add the noise to the image
     noisy_img = np.clip(img + noise, 0, 255).astype(np.uint8)
-
+    return noisy_img
     # Display the noisy image
-    cv2.imshow('Noisy Image', noisy_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Noisy Image', noisy_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()

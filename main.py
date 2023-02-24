@@ -132,7 +132,9 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(impulse(i))
         print(generatedimages)
-            
+        for i in generatedimages:
+            cv2.imwrite('output/salt-and-pepper-lena1.jpg',i)
+
 
     def function2(self):
         print('Function 2 was called')

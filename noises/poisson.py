@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import random
-def poisson_func(imagelocation):
+def poisson(imagelocation):
     image = cv2.imread(imagelocation)
     PEAK=1
     return np.random.poisson(image / 255.0 * PEAK) / PEAK * 255

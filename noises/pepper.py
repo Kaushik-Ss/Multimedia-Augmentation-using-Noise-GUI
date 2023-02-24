@@ -3,7 +3,7 @@ import numpy as np
 from skimage.util import random_noise
 from wand.image import Image
 
-def peppernoise(imagelocation,amountrange):
+def pepper(imagelocation,amountrange):
     # Load the image
     img = cv2.imread(imagelocation)
 
@@ -14,11 +14,11 @@ def peppernoise(imagelocation,amountrange):
     # on the range [0, 1], thus we changed it to 'uint8'
     # and from [0,255]
     noise_img = np.array(255*noise_img, dtype = 'uint8')
-
+    return noise_img
     # Display the noise image
-    cv2.imshow('blur',noise_img)
-    cv2.waitKey(0)
+    # cv2.imshow('blur',noise_img)
+    # cv2.waitKey(0)
     # cv2.imwrite('C:/Users/fredd/Documents/GitHub/Prism-gui-image-augment/noises/image.png',Image)
     # img.save(filename ="peppernoise.jpeg")
 
-peppernoise(r"C:\Users\fredd\Documents\GitHub\Prism-gui-image-augment\images\image-25.jpg",0.3)
+# peppernoise(r"C:\Users\fredd\Documents\GitHub\Prism-gui-image-augment\images\image-25.jpg",0.3)

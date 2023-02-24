@@ -12,7 +12,8 @@ def flimgrain(imagelocation):
     noise = np.random.normal(loc=0, scale=noise_level, size=img.shape)
     noisy_img = np.clip(img.astype(np.float32) + noise*255, 0, 255).astype(np.uint8)
 
+    return noisy_img
     # Display the noisy image
-    cv2.imshow('Noisy Image', noisy_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Noisy Image', noisy_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()

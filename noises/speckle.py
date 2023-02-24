@@ -15,8 +15,8 @@ def speckle(imagelocation):
 
     # Clip the pixel values to the valid range [0, 255]
     noisy_img = np.clip(noisy_img, 0, 255).astype(np.uint8)
-
+    return noisy_img
     # Display the noisy image
-    cv2.imshow('Noisy Image', noisy_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Noisy Image', noisy_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
