@@ -52,7 +52,7 @@ class Project(QWidget):
         
         self.chkbxs=[]
         self.labels=[]
-        folder_dir='images/'
+        folder_dir='output/'
 
         main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
