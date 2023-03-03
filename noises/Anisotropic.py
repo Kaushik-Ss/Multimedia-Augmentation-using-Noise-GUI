@@ -28,9 +28,6 @@
 import numpy as np
 import cv2
 import time
-from skimage.restoration import denoise_tv_chambolle
-from scipy.ndimage import gaussian_filter
-from scipy.ndimage import gaussian_gradient_magnitude
 
 def anisotropic(imagelocation):
     img = cv2.imread(imagelocation, 0)

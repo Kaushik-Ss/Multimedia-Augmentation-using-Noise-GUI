@@ -5,4 +5,4 @@ def exponential(image):
     PEAK=1
     return np.random.exponential(image / 255.0 * PEAK) / PEAK * 255
 
-# cv2.imwrite('exponential.jpeg',exponential_func("images\image-3.jpg"))
+# cv2.imwrite('exponential.jpeg',exponential("images\image-3.jpg"))

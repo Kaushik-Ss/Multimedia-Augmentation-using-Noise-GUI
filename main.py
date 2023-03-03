@@ -48,7 +48,7 @@ class Project(QWidget):
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
 
-        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Speckle','Uniform']
+        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
         
         self.chkbxs=[]
         self.labels=[]
@@ -239,7 +239,7 @@ class Project(QWidget):
     def uniform(self):
         generatedimages = []
         for i in self.addedimages:
-            generatedimages.append(uniformnoise(i))
+            generatedimages.append(uniform(i))
         for i in range(len(generatedimages)):
             print('output/uniform'+str(i+1)+'.jpg')
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
