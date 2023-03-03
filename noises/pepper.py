@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 from skimage.util import random_noise
-from wand.image import Image
 
-def pepper(imagelocation,amountrange):
+def pepper(imagelocation):
+    amountrange = 0.3
     # Load the image
     img = cv2.imread(imagelocation)
 

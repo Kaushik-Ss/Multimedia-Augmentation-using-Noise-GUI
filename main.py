@@ -152,6 +152,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(impulse(i))
         for i in range(len(generatedimages)):
+            print('output/impulse'+str(i+1)+'.jpg')
             cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
 
 
@@ -160,6 +161,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(anisotropic(i))
         for i in range(len(generatedimages)):
+            print('output/anisotropic'+str(i+1)+'.jpg')
             cv2.imwrite('output/anisotropic'+str(i+1)+'.jpg',generatedimages[i])
 
     def exponential(self):
@@ -167,6 +169,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(exponential(i))
         for i in range(len(generatedimages)):
+            print('output/exponential'+str(i+1)+'.jpg')
             cv2.imwrite('output/exponential'+str(i+1)+'.jpg',generatedimages[i])
 
     def flimgrain(self):
@@ -174,6 +177,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(flimgrain(i))
         for i in range(len(generatedimages)):
+            print('output/flimgrain'+str(i+1)+'.jpg')
             cv2.imwrite('output/flimgrain'+str(i+1)+'.jpg',generatedimages[i])
 
     def gamma(self):
@@ -181,6 +185,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(gamma(i))
         for i in range(len(generatedimages)):
+            print('output/gamma'+str(i+1)+'.jpg')
             cv2.imwrite('output/gamma'+str(i+1)+'.jpg',generatedimages[i])
 
     def gaussian(self):
@@ -188,6 +193,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(gaussian(i))
         for i in range(len(generatedimages)):
+            print('output/gaussian'+str(i+1)+'.jpg')
             cv2.imwrite('output/gaussian'+str(i+1)+'.jpg',generatedimages[i])
 
     def pepper(self):
@@ -195,6 +201,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(pepper(i))
         for i in range(len(generatedimages)):
+            print('output/pepper'+str(i+1)+'.jpg')
             cv2.imwrite('output/pepper'+str(i+1)+'.jpg',generatedimages[i])
 
     def periodic(self):
@@ -202,6 +209,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(periodic(i))
         for i in range(len(generatedimages)):
+            print("output/periodic"+str(i+1)+'.jpg')
             cv2.imwrite('output/periodic'+str(i+1)+'.jpg',generatedimages[i])
 
     def poisson(self):
@@ -209,6 +217,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(poisson(i))
         for i in range(len(generatedimages)):
+            print('output/poisson'+str(i+1)+'.jpg')
             cv2.imwrite('output/poisson'+str(i+1)+'.jpg',generatedimages[i])
 
     def rayleigh(self):
@@ -216,6 +225,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(add_rayleigh_noise(i))
         for i in range(len(generatedimages)):
+            print('output/rayleigh'+str(i+1)+'.jpg')
             cv2.imwrite('output/rayleigh'+str(i+1)+'.jpg',generatedimages[i])
 
     def speckle(self):
@@ -223,6 +233,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(speckle(i))
         for i in range(len(generatedimages)):
+            print('output/speckle'+str(i+1)+'.jpg')
             cv2.imwrite('output/speckle'+str(i+1)+'.jpg',generatedimages[i])
 
     def uniform(self):
@@ -230,6 +241,7 @@ class Project(QWidget):
         for i in self.addedimages:
             generatedimages.append(uniformnoise(i))
         for i in range(len(generatedimages)):
+            print('output/uniform'+str(i+1)+'.jpg')
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
 

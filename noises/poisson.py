@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import random
 def poisson(imagelocation):
     image = cv2.imread(imagelocation)
     PEAK=1
