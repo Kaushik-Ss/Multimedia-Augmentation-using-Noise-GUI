@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import random
 def gamma(image):
     image = cv2.imread(image)
     PEAK=1
