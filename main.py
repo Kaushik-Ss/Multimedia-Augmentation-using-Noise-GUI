@@ -214,7 +214,7 @@ class Project(QWidget):
     def rayleigh(self):
         generatedimages = []
         for i in self.addedimages:
-            generatedimages.append(rayleigh(i))
+            generatedimages.append(add_rayleigh_noise(i))
         for i in range(len(generatedimages)):
             cv2.imwrite('output/rayleigh'+str(i+1)+'.jpg',generatedimages[i])
 
