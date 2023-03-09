@@ -1,5 +1,6 @@
 import os
 import sys
+import subprocess
 from noises.impulse import *
 from noises.anisotropic import *
 from noises.exponential import *
@@ -18,10 +19,13 @@ from PyQt5.QtCore import Qt,QUrl
 from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
 from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
 from PyQt5 import QtCore,QtWidgets
+from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QWidget, QGridLayout, QPushButton
+from PyQt5.QtGui import QPixmap
+
 from multiprocessing import Pool
 # p = Pool(10)
 
-
+flag=0
 class ImageLabel(QLabel):
     def __init__(self):
         super().__init__()
@@ -52,43 +56,41 @@ class Project(QWidget):
         
         self.chkbxs=[]
         self.labels=[]
-        folder_dir='output/'
+        self.folder_dir='output/'
 
-        main_container=QHBoxLayout()
+        self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
         self.labels.append(self.photoViewer)
-        main_container.addWidget(self.photoViewer)        
-        scrollArea = QtWidgets.QScrollArea()
-        scrollArea.setWidgetResizable(True)
-        scrollAreaWidgetContents = QtWidgets.QWidget()
-        grid_generated = QtWidgets.QGridLayout(scrollAreaWidgetContents)
-        scrollArea.setWidget(scrollAreaWidgetContents)
+        self.main_container.addWidget(self.photoViewer)        
         
-        try:
-            i=0
-            c=0
-            max_r=3
-            r=0
-            for image in os.listdir(folder_dir):
-                if (image.endswith(".jpg")):
-                    name_image=os.path.join(folder_dir,image)
-                    word_image=QLabel(self)
-                    self.labels.append(word_image)
-                    pixmap=QPixmap(name_image)
-                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
-                    pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-                    
-                    word_image.setPixmap(pixmap)
-                    # word_image.mousePressEvent = self.openImage(name_image)
-                    word_image.mousePressEvent = lambda event: self.openImage(name_image)
-                    grid_generated.addWidget(word_image,r,i)
-                    i=i+1
-                    if i==max_r:
-                        r+=1
-                        i=0
-            main_container.addWidget(scrollArea)
-        except Exception as e:
-            print("Image not found.") 
+        
+        self.scrollArea = QtWidgets.QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.gird_generated = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        
+        
+        self.add_image_grid()
+        
+        
+        self.main_container.addWidget(self.scrollArea)
+        # self.scroll_area = QScrollArea(self)
+        # self.grid_widget = QWidget()
+        # self.grid_layout = QGridLayout(self.grid_widget)
+        # self.scroll_area.setWidget(self.grid_widget)
+        # self.load_images()
+
+        # # Set the layout of the main widget
+        # main_layout = QVBoxLayout(self)
+        # main_layout.addWidget(self.scroll_area)
+        
+        
+        
+        
+        
+        
+        
 
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
@@ -139,11 +141,11 @@ class Project(QWidget):
 
 
         title_v_box.addLayout(title_v_box_op)        
-        main_container.addLayout(title_v_box)
-        main_container.setStretchFactor(title_v_box, 1)
+        self.main_container.addLayout(title_v_box)
+        self.main_container.setStretchFactor(title_v_box, 1)
         
         self.styles()
-        self.setLayout(main_container)
+        self.setLayout(self.main_container)
         self.show()
 
     
@@ -250,6 +252,9 @@ class Project(QWidget):
             if isinstance(widget, QCheckBox) and widget.isChecked():
                 label = widget.text()
                 self.checkbox_functions[label]()
+        to_open=os.path.abspath(self.folder_dir)
+        subprocess.Popen(r'explorer '+to_open)
+        self.add_image_grid()
 
     def styles(self):
         font_loc="fonts/GothamMedium_1.ttf"
@@ -262,6 +267,97 @@ class Project(QWidget):
         for widget in self.labels:
             widget.setFont(font)
             
+    def add_image_grid(self):
+        
+        
+        self.folder_dir='output/'
+        isExist = os.path.exists(self.folder_dir)
+        if not isExist:
+            os.makedirs(self.folder_dir)
+            
+        # self.gird_generated.update()
+        # self.grid_layout.activate()
+        
+
+        # layout = QVBoxLayout()
+        # self.scene.clear()
+        
+        # for file in os.listdir(self.folder_dir):
+        #     if file.endswith(".jpg"):
+        #         print(file)
+        #         self.scene = QGraphicsScene()
+        #         self.view = QGraphicsView(self.scene)
+                # image_paths.append(file)
+                # name_image=os.path.join(self.folder_dir,file)
+
+                # pixmap = 
+                # print(pixmap)
+                # pixmap=
+                # item = self.scene.addPixmap(
+                # pixmap=QPixmap(os.path.join(self.folder_dir, file)).scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                
+                # layout.addWidget(pixmap, 0, Qt.AlignCenter)
+                # layout.addWidget(self.view)
+        # self.gird_generated = QtWidgets.QGridLayout()
+        # layout = QVBoxLayout()
+        
+            # print(os.getcwd())
+
+        # self.main_container.addLayout(layout)
+        
+           # Create a new dir
+        # self.gird_generated.clearContents()
+        # scrollAreaWidgetContents = self.scrollArea.widget()
+        # for child_widget in scrollAreaWidgetContents.children():
+        #     child_widget.deleteLater()
+        # if self.scrollArea is not None and self.scrollArea in self.main_container.children():
+        #     self.main_container.removeWidget(self.scrollArea)
+        # if self.scrollArea:
+        #     self.main_container.removeWidget(self.scrollArea)
+        while self.gird_generated.count():
+            child = self.gird_generated.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+                
+        try:
+            i=0
+            c=0
+            max_r=3
+            r=0
+            for image in os.listdir(self.folder_dir):
+                if (image.endswith(".jpg")):
+                    self.name_image=os.path.join(self.folder_dir,image)
+                    self.word_image=QLabel(self)
+                    self.labels.append(self.word_image)
+                    pixmap=QPixmap(self.name_image)
+                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    
+                    self.word_image.setPixmap(pixmap)
+                    # self.word_image.mousePressEvent = self.openImage(name_image)
+                    self.word_image.mousePressEvent = lambda event: self.openImage(self.name_image)
+                    
+                    
+                    
+
+                    self.gird_generated.addWidget(self.word_image,r,i)
+                    i=i+1
+                    if i==max_r:
+                        r+=1
+                        i=0
+                self.gird_generated.update()
+                self.gird_generated.activate()
+            
+            self.gird_generated.update()
+            self.gird_generated.activate()
+            # self.scrollArea.deleteLater()
+
+            # scrollArea.deleteLater()
+            # self.main_container.replaceWidget(self.scrollArea,self.scrollArea)
+        except Exception as e:
+            print("Image not found.",e) 
+            
+
         
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
@@ -298,7 +394,11 @@ class Project(QWidget):
         pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
         pixmap.mousePressEvent = self.openImage
         self.photoViewer.setPixmap(pixmap)
+        
     def openImage(self, file_dir):    # Open a file dialog to select an image file
+        
+        print(file_dir)
+        print(os.getcwd())
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
 if __name__ == '__main__':
