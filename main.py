@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 from noises.impulse import *
-from noises.anisotropic import *
+from noises.Anisotropic import *
 from noises.exponential import *
 from noises.flimgrain import *
 from noises.gamma import *
@@ -32,11 +32,17 @@ class ImageLabel(QLabel):
 
         self.setAlignment(Qt.AlignCenter)
         self.setText('\n\n Drop Image Here \n\n')
-        self.setStyleSheet('''
-            QLabel{
-                border: 4px dashed #aaa
-            }
-        ''')
+        # self.setText.setSt
+        self.setStyleSheet(
+            
+                "color: black;"
+                "background-color:#ECF9FF;"
+                             "border-style: dashed;"
+                             "border-width: 5px;"
+                             "border-color: black;"
+                             "border-radius: 3px"
+            
+        )
 
 
     def setPixmap(self, image):
@@ -47,6 +53,7 @@ class Project(QWidget):
         super().__init__()
         self.intitalizeUI()
         self.setAcceptDrops(True)
+        
 
     def intitalizeUI(self): 
         self.setWindowTitle('Image Augment')
@@ -69,6 +76,7 @@ class Project(QWidget):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.gird_generated = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.scrollArea.setStyleSheet("background-color:#93BFCF")
         
         
         self.add_image_grid()
@@ -95,21 +103,24 @@ class Project(QWidget):
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
         button_gen.clicked.connect(self.submit)
+        button_gen.setStyleSheet("background-color : white;button_gen:hover")
         
 
         button_add = QPushButton('Add images', self)
         self.labels.append(button_add)
         button_add.clicked.connect(self.add_image)
+        button_add.setStyleSheet("background-color : white")
         
-        title_v_box_op = QHBoxLayout()
-        title_v_box_op.addWidget(button_gen)
-        # title_v_box_op.addStretch()
-        title_v_box_op.addWidget(button_add)
-        # title_v_box_op.addStretch()
-        # title_v_box_op.setSpacing(60)
+        title_h_box = QHBoxLayout()
+        title_h_box.addWidget(button_gen)
+        # title_h_box.addStretch()
+        title_h_box.addWidget(button_add)
+        # title_h_box.addStretch()
+        # title_h_box.setSpacing(60)
         
     
-        title_v_box = QVBoxLayout()        
+        title_v_box = QVBoxLayout()   
+        title_v_box.setAlignment(Qt.AlignCenter)     
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
         self.labels.append(text_noise)
@@ -140,7 +151,7 @@ class Project(QWidget):
         self.checkbox_functions['Uniform'] = self.uniform
 
 
-        title_v_box.addLayout(title_v_box_op)        
+        title_v_box.addLayout(title_h_box)        
         self.main_container.addLayout(title_v_box)
         self.main_container.setStretchFactor(title_v_box, 1)
         
@@ -263,7 +274,10 @@ class Project(QWidget):
         font = QFont(font_family)
         font.setPointSize(8)
         font.setItalic(True)
-        self.setStyleSheet('font-size: 16pt; font-family: {}; font-weight: italic;'.format(font_family))
+        
+        self.setStyleSheet(
+                           'background-color:#6096B4;'
+                           'font-size: 16pt; font-family: {}; font-weight: italic;'.format(font_family))
         for widget in self.labels:
             widget.setFont(font)
             
