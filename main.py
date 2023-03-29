@@ -1,6 +1,10 @@
 import os
 import sys
 import subprocess
+
+from multiprocessing import Pool,Manager
+import multiprocessing
+import concurrent.futures
 from noises.impulse import *
 from noises.Anisotropic import *
 from noises.exponential import *
@@ -17,21 +21,25 @@ from noises.uniform import *
 
 # from noises.
 
-from PyQt5.QtCore import Qt,QUrl
+from PyQt5.QtCore import Qt,QUrl,QObject, QRunnable, QThreadPool
 from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
 from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
 from PyQt5 import QtCore,QtWidgets
 from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QWidget, QGridLayout, QPushButton
 from PyQt5.QtGui import QPixmap
 
-from multiprocessing import Pool
-# p = Pool(10)
 
 flag=0
 class ImageLabel(QLabel):
+    def test_multi_processing(self):
+        print("Number of cpu : ", multiprocessing.cpu_count())
+
+    
+        
+        
     def __init__(self):
         super().__init__()
-
+        self.test_multi_processing()
         self.setAlignment(Qt.AlignCenter)
         self.setText('\n\n Drop Image Here \n\n')
         # self.setText.setSt
@@ -53,10 +61,17 @@ class ImageLabel(QLabel):
 class Project(QWidget):
     
     
+    
+    def __getstate__(self):
+        return {'some_data': self.addedimages}
 
+    def __setstate__(self, state):
+        self.addedimages = state['some_data']
+        
 
     def __init__(self):
         super().__init__()
+        self.some_data = 42
         self.intitalizeUI()
         self.setAcceptDrops(True)
         
@@ -263,6 +278,7 @@ class Project(QWidget):
         for i in range(len(generatedimages)):
             print('output/speckle'+str(i+1)+'.jpg')
             cv2.imwrite('output/speckle'+str(i+1)+'.jpg',generatedimages[i])
+        return True
 
     def uniform(self):
         generatedimages = []
@@ -275,18 +291,37 @@ class Project(QWidget):
     def identify(self):
         
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
-        k=identify_image_in_noise(self.file_name)
-        
-        
+        # k=identify_image_in_noise(self.file_name)
+          
     def submit(self):
-        for widget in self.chkbxs:
-            if isinstance(widget, QCheckBox) and widget.isChecked():
-                label = widget.text()
-                self.checkbox_functions[label]()
-        to_open=os.path.abspath(self.folder_dir)
-        subprocess.Popen(r'explorer '+to_open)
-        self.add_image_grid()
+        # self.addedimages.append("C:/Users/kaush/Pictures/k_block.jpg")
+        # print(self.addedimages)
+        # print(os.getcwd())
+        results = {}
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for widget in self.chkbxs:
+                if isinstance(widget, QCheckBox) and widget.isChecked():
+                    label = widget.text()
+                    # print(label)
+                    # print([label])
+                    future=executor.submit(self.checkbox_functions[label])
+                    results[label] = future 
+                    print("Submitted future for checkbox:", label)
+                    # results[label] = future
+                    
 
+        # for label, future in results.items():
+        #     print(f'{label}: {future.result()}')
+        concurrent.futures.wait(results.values())
+        for label, future in results.items():
+                result = future.result()
+                # print("Result for checkbox", label, ":", result)
+
+        to_open = os.path.abspath(self.folder_dir)
+        subprocess.Popen(r'explorer ' + to_open)
+        self.add_image_grid()
+            
+            
     def styles(self):
         font_loc="fonts/GothamMedium_1.ttf"
         font_id = QFontDatabase.addApplicationFont(font_loc)
@@ -363,7 +398,10 @@ class Project(QWidget):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         print(self.file_name)
         self.addedimages.append(self.file_name)
-
+ 
+ 
+ 
+ 
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
