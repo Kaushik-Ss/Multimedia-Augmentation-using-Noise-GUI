@@ -13,6 +13,8 @@ from noises.poisson import *
 from noises.rayleigh import *
 from noises.speckle import *
 from noises.uniform import *
+# from noises.identify_noise import *
+
 # from noises.
 
 from PyQt5.QtCore import Qt,QUrl
@@ -49,6 +51,10 @@ class ImageLabel(QLabel):
         super().setPixmap(image)
 
 class Project(QWidget):
+    
+    
+
+
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
@@ -111,10 +117,18 @@ class Project(QWidget):
         button_add.clicked.connect(self.add_image)
         button_add.setStyleSheet("background-color : white")
         
+        button_iden = QPushButton('Identify image', self)
+        self.labels.append(button_iden)
+        button_iden.clicked.connect(self.identify)
+        button_iden.setStyleSheet("background-color : white")
+        
+        
         title_h_box = QHBoxLayout()
         title_h_box.addWidget(button_gen)
         # title_h_box.addStretch()
         title_h_box.addWidget(button_add)
+        title_h_box.addWidget(button_iden)
+        
         # title_h_box.addStretch()
         # title_h_box.setSpacing(60)
         
@@ -159,6 +173,7 @@ class Project(QWidget):
         self.setLayout(self.main_container)
         self.show()
 
+    
     
     def impulse(self):
         generatedimages = []
@@ -257,7 +272,12 @@ class Project(QWidget):
             print('output/uniform'+str(i+1)+'.jpg')
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
-
+    def identify(self):
+        
+        self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
+        k=identify_image_in_noise(self.file_name)
+        
+        
     def submit(self):
         for widget in self.chkbxs:
             if isinstance(widget, QCheckBox) and widget.isChecked():
@@ -289,45 +309,6 @@ class Project(QWidget):
         if not isExist:
             os.makedirs(self.folder_dir)
             
-        # self.gird_generated.update()
-        # self.grid_layout.activate()
-        
-
-        # layout = QVBoxLayout()
-        # self.scene.clear()
-        
-        # for file in os.listdir(self.folder_dir):
-        #     if file.endswith(".jpg"):
-        #         print(file)
-        #         self.scene = QGraphicsScene()
-        #         self.view = QGraphicsView(self.scene)
-                # image_paths.append(file)
-                # name_image=os.path.join(self.folder_dir,file)
-
-                # pixmap = 
-                # print(pixmap)
-                # pixmap=
-                # item = self.scene.addPixmap(
-                # pixmap=QPixmap(os.path.join(self.folder_dir, file)).scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-                
-                # layout.addWidget(pixmap, 0, Qt.AlignCenter)
-                # layout.addWidget(self.view)
-        # self.gird_generated = QtWidgets.QGridLayout()
-        # layout = QVBoxLayout()
-        
-            # print(os.getcwd())
-
-        # self.main_container.addLayout(layout)
-        
-           # Create a new dir
-        # self.gird_generated.clearContents()
-        # scrollAreaWidgetContents = self.scrollArea.widget()
-        # for child_widget in scrollAreaWidgetContents.children():
-        #     child_widget.deleteLater()
-        # if self.scrollArea is not None and self.scrollArea in self.main_container.children():
-        #     self.main_container.removeWidget(self.scrollArea)
-        # if self.scrollArea:
-        #     self.main_container.removeWidget(self.scrollArea)
         while self.gird_generated.count():
             child = self.gird_generated.takeAt(0)
             if child.widget():
@@ -349,8 +330,17 @@ class Project(QWidget):
                     
                     self.word_image.setPixmap(pixmap)
                     # self.word_image.mousePressEvent = self.openImage(name_image)
-                    self.word_image.mousePressEvent = lambda event: self.openImage(self.name_image)
                     
+                    
+                    # self.word_image.mousePressEvent = lambda event: self.openImage(self.name_image)
+                    
+                    def create_image_handler(image_name):
+                        def handler(event):
+                            self.openImage(image_name)
+                        return handler
+    
+    
+                    self.word_image.mousePressEvent = create_image_handler(self.name_image)
                     
                     
 
@@ -364,10 +354,6 @@ class Project(QWidget):
             
             self.gird_generated.update()
             self.gird_generated.activate()
-            # self.scrollArea.deleteLater()
-
-            # scrollArea.deleteLater()
-            # self.main_container.replaceWidget(self.scrollArea,self.scrollArea)
         except Exception as e:
             print("Image not found.",e) 
             
@@ -375,9 +361,9 @@ class Project(QWidget):
         
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
-        # print(_)
-        print(self.file_name)        
+        print(self.file_name)
         self.addedimages.append(self.file_name)
+
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -402,7 +388,9 @@ class Project(QWidget):
             event.ignore()
 
     def set_image(self, file_path):
+        
         self.addedimages.append(file_path)
+        
         pixmap=QPixmap(file_path)
         print(file_path)
         pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -410,7 +398,6 @@ class Project(QWidget):
         self.photoViewer.setPixmap(pixmap)
         
     def openImage(self, file_dir):    # Open a file dialog to select an image file
-        
         print(file_dir)
         print(os.getcwd())
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
