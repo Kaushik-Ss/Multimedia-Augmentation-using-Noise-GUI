@@ -6,7 +6,7 @@ from multiprocessing import Pool,Manager
 import multiprocessing
 import concurrent.futures
 from noises.impulse import *
-from noises.Anisotropic import *
+from noises.anisotropic import *
 from noises.exponential import *
 from noises.flimgrain import *
 from noises.gamma import *
