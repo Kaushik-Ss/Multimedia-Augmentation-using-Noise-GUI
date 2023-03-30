@@ -32,7 +32,7 @@ from PyQt5.QtGui import QPixmap
 flag=0
 class ImageLabel(QLabel):
     def test_multi_processing(self):
-        print("Number of cpu : ", multiprocessing.cpu_count())
+        print("Using", multiprocessing.cpu_count(),"CPU cores")
 
     
         
@@ -124,25 +124,44 @@ class Project(QWidget):
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
         button_gen.clicked.connect(self.submit)
-        button_gen.setStyleSheet("background-color : white;button_gen:hover")
+        button_gen.setStyleSheet("""
+        
+        QPushButton {
+            background-color: white; 
+        }
+        QPushButton:hover {
+             background-color:green;
+             color:white;
+        }
+        """)
         
 
         button_add = QPushButton('Add images', self)
         self.labels.append(button_add)
         button_add.clicked.connect(self.add_image)
-        button_add.setStyleSheet("background-color : white")
+        button_add.setStyleSheet("""
         
-        button_iden = QPushButton('Identify image', self)
-        self.labels.append(button_iden)
-        button_iden.clicked.connect(self.identify)
-        button_iden.setStyleSheet("background-color : white")
+        QPushButton {
+            background-color: white; 
+        }
+        QPushButton:hover {
+             background-color:green;
+             color:white;
+
+        }
+        """)
+
+        # button_iden = QPushButton('Identify image', self)
+        # self.labels.append(button_iden)
+        # button_iden.clicked.connect(self.identify)
+        # button_iden.setStyleSheet("background-color : white")
         
         
         title_h_box = QHBoxLayout()
         title_h_box.addWidget(button_gen)
         # title_h_box.addStretch()
         title_h_box.addWidget(button_add)
-        title_h_box.addWidget(button_iden)
+        # title_h_box.addWidget(button_iden)
         
         # title_h_box.addStretch()
         # title_h_box.setSpacing(60)
@@ -437,7 +456,7 @@ class Project(QWidget):
         
     def openImage(self, file_dir):    # Open a file dialog to select an image file
         print(file_dir)
-        print(os.getcwd())
+        # print(os.getcwd())
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
 if __name__ == '__main__':
