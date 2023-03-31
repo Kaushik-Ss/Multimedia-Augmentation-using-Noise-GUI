@@ -217,13 +217,11 @@ class Project(QWidget):
         self.checkbox_functions['Uniform'] = self.uniform
 
 
-        title_v_box.addLayout(title_h_box)        
-        self.main_container.addLayout(title_v_box_a)
+        title_v_box.addLayout(title_h_box_a)     
+        title_v_box.addLayout(title_h_box_b)     
+        self.main_container.addLayout(title_v_box)
 
-        self.main_container.setStretchFactor(title_v_box_a, 1)
-        self.main_container.addLayout(title_v_box_b)
-
-        self.main_container.setStretchFactor(title_v_box_b, 1)
+        self.main_container.setStretchFactor(title_v_box, 1)
         
         self.styles()
         self.setLayout(self.main_container)
