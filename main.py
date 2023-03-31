@@ -316,6 +316,9 @@ class Project(QWidget):
         # self.addedimages.append("C:/Users/kaush/Pictures/k_block.jpg")
         # print(self.addedimages)
         # print(os.getcwd())
+        import timeit
+        start = timeit.default_timer()
+        
         results = {}
         with concurrent.futures.ProcessPoolExecutor() as executor:
             for widget in self.chkbxs:
@@ -335,7 +338,8 @@ class Project(QWidget):
         for label, future in results.items():
                 result = future.result()
                 # print("Result for checkbox", label, ":", result)
-
+        stop= timeit.default_timer()
+        print(stop-start)
         to_open = os.path.abspath(self.folder_dir)
         subprocess.Popen(r'explorer ' + to_open)
         self.add_image_grid()
