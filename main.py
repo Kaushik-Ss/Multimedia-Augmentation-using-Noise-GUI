@@ -173,12 +173,13 @@ class Project(QWidget):
         
         
         
-        title_h_box = QHBoxLayout()
-        title_h_box.addWidget(button_gen)
-        # title_h_box.addStretch()
-        title_h_box.addWidget(button_add)
-        title_h_box.addWidget(button_iden)
-        title_h_box.addWidget(button_inv)
+        title_h_box_a = QHBoxLayout()
+        title_h_box_a.addWidget(button_gen)
+        # title_h_box_a.addStretch()
+        title_h_box_a.addWidget(button_add)
+        title_h_box_b=QHBoxLayout()
+        title_h_box_b.addWidget(button_iden)
+        title_h_box_b.addWidget(button_inv)
         
         # title_h_box.addStretch()
         # title_h_box.setSpacing(20)
@@ -217,8 +218,12 @@ class Project(QWidget):
 
 
         title_v_box.addLayout(title_h_box)        
-        self.main_container.addLayout(title_v_box)
-        self.main_container.setStretchFactor(title_v_box, 1)
+        self.main_container.addLayout(title_v_box_a)
+
+        self.main_container.setStretchFactor(title_v_box_a, 1)
+        self.main_container.addLayout(title_v_box_b)
+
+        self.main_container.setStretchFactor(title_v_box_b, 1)
         
         self.styles()
         self.setLayout(self.main_container)
