@@ -2,7 +2,6 @@ import os
 import sys
 import subprocess
 
-from multiprocessing import Pool,Manager
 import multiprocessing
 import concurrent.futures
 from noises.impulse import *
@@ -44,14 +43,14 @@ class ImageLabel(QLabel):
         self.setText('\n\n Drop Image Here \n\n')
         # self.setText.setSt
         self.setStyleSheet(
-            
+
                 "color: black;"
+                "width: 500px;"
                 "background-color:#ECF9FF;"
                              "border-style: dashed;"
                              "border-width: 5px;"
                              "border-color: black;"
-                             "border-radius: 3px"
-            
+                             "border-radius: 3px"    
         )
 
 
@@ -71,7 +70,6 @@ class Project(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.some_data = 42
         self.intitalizeUI()
         self.setAcceptDrops(True)
         
@@ -79,9 +77,7 @@ class Project(QWidget):
     def intitalizeUI(self): 
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
-
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
-        
         self.chkbxs=[]
         self.labels=[]
         self.folder_dir='output/'
@@ -101,8 +97,6 @@ class Project(QWidget):
         
         
         self.add_image_grid()
-        
-        
         self.main_container.addWidget(self.scrollArea)
         # self.scroll_area = QScrollArea(self)
         # self.grid_widget = QWidget()
@@ -113,19 +107,12 @@ class Project(QWidget):
         # # Set the layout of the main widget
         # main_layout = QVBoxLayout(self)
         # main_layout.addWidget(self.scroll_area)
-        
-        
-        
-        
-        
-        
-        
 
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
         button_gen.clicked.connect(self.submit)
+
         button_gen.setStyleSheet("""
-        
         QPushButton {
             background-color: white; 
         }
@@ -140,7 +127,6 @@ class Project(QWidget):
         self.labels.append(button_add)
         button_add.clicked.connect(self.add_image)
         button_add.setStyleSheet("""
-        
         QPushButton {
             background-color: white; 
         }
@@ -151,20 +137,51 @@ class Project(QWidget):
         }
         """)
 
-        # button_iden = QPushButton('Identify image', self)
-        # self.labels.append(button_iden)
+        button_iden = QPushButton('Add all noises', self)
+        self.labels.append(button_iden)
+        # self.button_iden.setChecked(False)
+        button_iden.clicked.connect(self.on_stateChanged)
         # button_iden.clicked.connect(self.identify)
-        # button_iden.setStyleSheet("background-color : white")
+        button_iden.setStyleSheet("background-color : white")
+
+        button_inv = QPushButton('Invert Selection',self)
+        self.labels.append(button_inv)
+        button_inv.clicked.connect(self.invertSelection)
+        button_inv.setStyleSheet("background-color : white")
+
+
+        button_iden.setStyleSheet("""
+        QPushButton {
+            background-color: white; 
+        }
+        QPushButton:hover {
+             background-color:green;
+             color:white;
+        }
+        """)
+        button_inv.setStyleSheet("""
+        QPushButton {
+            background-color: white; 
+        }
+        QPushButton:hover {
+             background-color:green;
+             color:white;
+        }
+        """)
+
+
+        
         
         
         title_h_box = QHBoxLayout()
         title_h_box.addWidget(button_gen)
         # title_h_box.addStretch()
         title_h_box.addWidget(button_add)
-        # title_h_box.addWidget(button_iden)
+        title_h_box.addWidget(button_iden)
+        title_h_box.addWidget(button_inv)
         
         # title_h_box.addStretch()
-        # title_h_box.setSpacing(60)
+        # title_h_box.setSpacing(20)
         
     
         title_v_box = QVBoxLayout()   
@@ -307,15 +324,11 @@ class Project(QWidget):
             print('output/uniform'+str(i+1)+'.jpg')
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
-    def identify(self):
-        
+    def identify(self):z
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
         # k=identify_image_in_noise(self.file_name)
           
     def submit(self):
-        # self.addedimages.append("C:/Users/kaush/Pictures/k_block.jpg")
-        # print(self.addedimages)
-        # print(os.getcwd())
         import timeit
         start = timeit.default_timer()
         
@@ -344,6 +357,16 @@ class Project(QWidget):
         subprocess.Popen(r'explorer ' + to_open)
         self.add_image_grid()
             
+    def on_stateChanged(self, state):
+        for widget in self.chkbxs:
+            widget.setChecked(True)
+
+    def invertSelection(self,state):
+        for widget in self.chkbxs:
+            if(widget.isChecked()):
+                widget.setChecked(False)
+            else:
+                widget.setChecked(True)
             
     def styles(self):
         font_loc="fonts/GothamMedium_1.ttf"
