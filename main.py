@@ -200,7 +200,7 @@ class Project(QWidget):
             self.labels.append(checkbox)
             self.chkbxs.append(checkbox)
             title_v_box.addWidget(checkbox)
-            title_v_box.setStretchFactor(checkbox, 1)
+            title_v_box.setStretchFactor(checkbox, 0)
 
         self.checkbox_functions = {}
         self.checkbox_functions['Impulse'] = self.impulse
@@ -327,7 +327,7 @@ class Project(QWidget):
             print('output/uniform'+str(i+1)+'.jpg')
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
-    def identify(self):z
+    def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
         # k=identify_image_in_noise(self.file_name)
           
