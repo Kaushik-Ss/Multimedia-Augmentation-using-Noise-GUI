@@ -26,19 +26,95 @@ from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
 from PyQt5 import QtCore,QtWidgets
 from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QWidget, QGridLayout, QPushButton
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout, QSplitter, QVBoxLayout
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QSizePolicy
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtCore import Qt
 
 
 flag=0
-class ImageLabel(QLabel):
-    def test_multi_processing(self):
-        print("Using", multiprocessing.cpu_count(),"CPU cores")
+
+
+width=256
+height=512
+class HoverPopup(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.label = QLabel(self)
+        self.label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.label.setAlignment(Qt.AlignCenter)
+        self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setStyleSheet("background-color: white; border: 1px solid gray;")
+
+    def setPixmap(self, pixmap):
+        self.label.setPixmap(pixmap)
+
+    def show(self, pos):
+        self.move(pos)
+        super().show()
 
     
+
+# class HoverLabel(QLabel):
+#     def __init__(self, parent=None):
+#         super().__init__(parent)
+#         self.hover_popup = HoverPopup(self)
+#         self.hover_popup.hide()
+#         self.setMouseTracking(True)
+#         self.setAlignment(Qt.AlignCenter)
+
+#     def enterEvent(self, event):
+#         pos = self.mapToGlobal(QPoint(0, self.height()))
+#         self.hover_popup.setPixmap(self.pixmap())
+#         self.hover_popup.show(pos)
+
+
+#     def leaveEvent(self, event):
+#         self.hover_popup.hide()
+
+#     def moveEvent(self, event):
+#         self.hover_popup.hide()
+#         # return super().moveEvent(a0)
+
+
+
+class HoverLabel(QLabel):
+    def __init__(self, parent=None):
+        QLabel.__init__(self, parent)
+        self.setStyleSheet("QLabel:hover { border: 2px solid red; }")
+        self.setAlignment(Qt.AlignCenter)
+
+    def enterEvent(self, event):
+                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+        pixmap = self.pixmap()
+        global width,height
+        if pixmap:
+            scaled_pixmap = pixmap.scaled(width*2, height*2, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.setPixmap(scaled_pixmap)
+            self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
+        self.setFixedSize(width*2, height*2)
+
+    def leaveEvent(self, event):
+        # pixmap=QPixmap()
+        
+        # self.pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+        pixmap = self.pixmap()
+        global width,height
+        if pixmap:
+            scaled_pixmap = pixmap.scaled(width, height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.setPixmap(scaled_pixmap)
+            self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
+        self.setFixedSize(width, height)
+
+        self.setFixedSize(width, height)
         
         
+class ImageLabel(QLabel):
     def __init__(self):
         super().__init__()
-        self.test_multi_processing()
         self.setAlignment(Qt.AlignCenter)
         self.setText('\n\n Drop Image Here \n\n')
         # self.setText.setSt
@@ -58,6 +134,9 @@ class ImageLabel(QLabel):
         super().setPixmap(image)
 
 class Project(QWidget):
+    def test_multi_processing(self):
+        print("Using", multiprocessing.cpu_count(),"CPU cores")
+
     
     
     
@@ -75,6 +154,7 @@ class Project(QWidget):
         
 
     def intitalizeUI(self): 
+        self.test_multi_processing()
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
@@ -84,6 +164,8 @@ class Project(QWidget):
 
         self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
+        # self.photoViewer.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+        self.photoViewer.setMinimumWidth(300);
         self.labels.append(self.photoViewer)
         self.main_container.addWidget(self.photoViewer)        
         
@@ -96,8 +178,10 @@ class Project(QWidget):
         self.scrollArea.setStyleSheet("background-color:#93BFCF")
         
         
-        self.add_image_grid()
+        self.add_image_grid()   
         self.main_container.addWidget(self.scrollArea)
+        self.scrollArea.setMinimumWidth(500)
+        
         # self.scroll_area = QScrollArea(self)
         # self.grid_widget = QWidget()
         # self.grid_layout = QGridLayout(self.grid_widget)
@@ -175,13 +259,13 @@ class Project(QWidget):
         
         title_h_box_a = QHBoxLayout()
         title_h_box_a.addWidget(button_gen)
-        # title_h_box_a.addStretch()
+        # title_h_box_a.addStretch(10)
         title_h_box_a.addWidget(button_add)
         title_h_box_b=QHBoxLayout()
         title_h_box_b.addWidget(button_iden)
         title_h_box_b.addWidget(button_inv)
         
-        # title_h_box.addStretch()
+        # title_h_box_b.addStretch(10)
         # title_h_box.setSpacing(20)
         
     
@@ -192,6 +276,8 @@ class Project(QWidget):
         self.labels.append(text_noise)
         # text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
+        title_v_box.addStretch(10)
+
         # title_v_box.setStretchFactor(text_noise, 1)
         # hbox.setStretchFactor(line_edit, 1
 
@@ -201,6 +287,7 @@ class Project(QWidget):
             self.chkbxs.append(checkbox)
             title_v_box.addWidget(checkbox)
             title_v_box.setStretchFactor(checkbox, 1)
+            title_v_box.addStretch(10)
 
         self.checkbox_functions = {}
         self.checkbox_functions['Impulse'] = self.impulse
@@ -327,7 +414,7 @@ class Project(QWidget):
             print('output/uniform'+str(i+1)+'.jpg')
             cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
-    def identify(self):z
+    def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
         # k=identify_image_in_noise(self.file_name)
           
@@ -350,6 +437,7 @@ class Project(QWidget):
 
         # for label, future in results.items():
         #     print(f'{label}: {future.result()}')
+
         concurrent.futures.wait(results.values())
         for label, future in results.items():
                 result = future.result()
@@ -399,19 +487,25 @@ class Project(QWidget):
                 child.widget().deleteLater()
                 
         try:
+            # splitter = QSplitter(Qt.Horizontal, self)
             i=0
             c=0
             max_r=3
             r=0
             for image in os.listdir(self.folder_dir):
                 if (image.endswith(".jpg")):
+                    small_grid=QGridLayout()
                     self.name_image=os.path.join(self.folder_dir,image)
-                    self.word_image=QLabel(self)
+                    self.text_def=QLabel(self)
+                    self.word_image=HoverLabel()
                     self.labels.append(self.word_image)
                     pixmap=QPixmap(self.name_image)
                     # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
                     pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-                    
+                    self.text_def.setText(image)
+                    self.text_def.setStyleSheet(
+                           'background-color:#6096B4;'
+                           'font-size: 16pt; font-weight: italic;')
                     self.word_image.setPixmap(pixmap)
                     # self.word_image.mousePressEvent = self.openImage(name_image)
                     
@@ -427,12 +521,17 @@ class Project(QWidget):
                     self.word_image.mousePressEvent = create_image_handler(self.name_image)
                     
                     
-
-                    self.gird_generated.addWidget(self.word_image,r,i)
+                    small_grid.addWidget(self.word_image,0,0)
+                    small_grid.addWidget(self.text_def,1,0)
+                    # print('"dasd')
+                    self.gird_generated.addLayout(small_grid,r,i)
+                    
                     i=i+1
                     if i==max_r:
                         r+=1
                         i=0
+                # self.gird_generated.setMinimumWidth(500)
+
                 self.gird_generated.update()
                 self.gird_generated.activate()
             
