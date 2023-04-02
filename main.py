@@ -462,6 +462,18 @@ class Project(QWidget):
         
           
     def submit(self):
+        if len(self.addedimages) == 0:
+            print('Please enter')
+            ret = QMessageBox.question(self, 'Critical', "Add Images!", QMessageBox.Ok, QMessageBox.Cancel)
+            if ret==QMessageBox.Ok:
+                pass
+            else:
+                # for error close lol 
+                # need to remove this
+                QMessageBox(self, "Title", "Message")
+            return 
+        
+        
         import timeit
         start = timeit.default_timer()
         # bar = QProgressBar(self)
@@ -483,7 +495,7 @@ class Project(QWidget):
                 print(f"Time taken for '{label}': {time_taken:.6f} seconds")
                 result = future.result()
         stop= timeit.default_timer()
-        print(stop-start)
+        print('Completed in ',stop-start,'seconds')
         to_open = os.path.abspath(folder_dir)
         subprocess.Popen(r'explorer ' + to_open)
         self.add_image_grid()
@@ -514,64 +526,70 @@ class Project(QWidget):
             widget.setFont(font)
             
     def add_image_grid(self):
-        
-        isExist = os.path.exists(folder_dir)
-        if not isExist:
-            os.makedirs(folder_dir)
-            
-        while self.gird_generated.count():
-            child = self.gird_generated.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
+        if show_preview:
+            isExist = os.path.exists(folder_dir)
+            if not isExist:
+                os.makedirs(folder_dir)
                 
-        try:
-            # splitter = QSplitter(Qt.Horizontal, self)
-            i=0
-            c=0
-            max_r=3
-            r=0
-            for image in os.listdir(folder_dir):
-                if (image.endswith(".jpg")):
-                    small_grid=QGridLayout()
-                    self.name_image=os.path.join(folder_dir,image)
-                    self.text_def=QLabel(self)
-                    self.word_image=HoverLabel()
-                    self.labels.append(self.word_image)
-                    pixmap=QPixmap(self.name_image)
-                    pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-                    self.text_def.setText(image)
-                    self.text_def.setFixedHeight(40)
-                    self.text_def.setStyleSheet(
-                           'background-color:#6096B4;'
-                           'font-size: 10pt; font-weight: italic;')
-                    self.word_image.setPixmap(pixmap)
+            while self.gird_generated.count():
+                child = self.gird_generated.takeAt(0)
+                if child.widget():
+                    child.widget().deleteLater()
                     
-                    def create_image_handler(image_name):
-                        def handler(event):
-                            self.openImage(image_name)
-                        return handler
-    
-                    self.word_image.mousePressEvent = create_image_handler(self.name_image)
-                    
-                    small_grid.addWidget(self.word_image,0,0)
-                    if show_name:
-                        small_grid.addWidget(self.text_def,1,0)
-                    self.gird_generated.addLayout(small_grid,r,i)
-                    
-                    i=i+1
-                    if i==max_r:
-                        r+=1
-                        i=0
-                # self.gird_generated.setMinimumWidth(500)
+            try:
+                # splitter = QSplitter(Qt.Horizontal, self)
+                i=0
+                c=0
+                max_r=3
+                r=0
+                for image in os.listdir(folder_dir):
+                    if (image.endswith(".jpg")):
+                        small_grid=QGridLayout()
+                        self.name_image=os.path.join(folder_dir,image)
+                        self.text_def=QLabel(self)
+                        self.word_image=HoverLabel()
+                        self.labels.append(self.word_image)
+                        pixmap=QPixmap(self.name_image)
+                        pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                        self.text_def.setText(image)
+                        self.text_def.setFixedHeight(40)
+                        self.text_def.setStyleSheet(
+                            'background-color:#6096B4;'
+                            'font-size: 10pt; font-weight: italic;')
+                        self.word_image.setPixmap(pixmap)
+                        
+                        def create_image_handler(image_name):
+                            def handler(event):
+                                self.openImage(image_name)
+                            return handler
+        
+                        self.word_image.mousePressEvent = create_image_handler(self.name_image)
+                        
+                        small_grid.addWidget(self.word_image,0,0)
+                        if show_name:
+                            small_grid.addWidget(self.text_def,1,0)
+                        self.gird_generated.addLayout(small_grid,r,i)
+                        
+                        i=i+1
+                        if i==max_r:
+                            r+=1
+                            i=0
+                    # self.gird_generated.setMinimumWidth(500)
 
+                    self.gird_generated.update()
+                    self.gird_generated.activate()
+                
                 self.gird_generated.update()
                 self.gird_generated.activate()
-            
-            self.gird_generated.update()
-            self.gird_generated.activate()
-        except Exception as e:
-            print("Image not found.",e) 
-            
+            except Exception as e:
+                print("Image not found.",e) 
+        else:
+            while self.gird_generated.count():
+                child = self.gird_generated.takeAt(0)
+                if child.widget():
+                    child.widget().removeItem(item)
+            # self.gird_generated.activate()
+                
        
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
