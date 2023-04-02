@@ -1,0 +1,1 @@
+https://forum.opencv.org/t/can-i-use-opencv-python-with-gpu/8947/2

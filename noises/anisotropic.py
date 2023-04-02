@@ -34,5 +34,12 @@ def anisotropic(imagelocation):
     mean = 0
     stddev = 50
     noise = np.random.normal(mean, stddev, img.shape)
-    noisy_img = img + noise.astype(np.uint8)
+    if cv2.cuda.getCudaEnabledDeviceCount() > 0: 
+        img_gpu = cv2.cuda_GpuMat(img)
+        noise_gpu = cv2.cuda_GpuMat(noise.astype(np.float32))
+        cv2.cuda.add(img_gpu, noise_gpu, img_gpu)
+        noisy_img = img_gpu.download()
+    else:
+        noisy_img = img + noise.astype(np.uint8)
+
     return noisy_img
