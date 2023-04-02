@@ -33,28 +33,38 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtCore import Qt
 
+# importing libraries
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import sys
 
-flag=0
 
-
+flag_hover=False
+show_name=False
+folder_dir='output/'
+show_preview=False
 width=256
 height=512
-class HoverPopup(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.label = QLabel(self)
-        self.label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setStyleSheet("background-color: white; border: 1px solid gray;")
 
-    def setPixmap(self, pixmap):
-        self.label.setPixmap(pixmap)
+# class HoverPopup(QWidget):
+#     def __init__(self, parent=None):
+#         super().__init__(parent)
+#         if flag_hover:
+#             self.label = QLabel(self)
+#             self.label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+#             self.label.setAlignment(Qt.AlignCenter)
+#             self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+#             self.setAttribute(Qt.WA_TranslucentBackground)
+#             self.setStyleSheet("background-color: white; border: 1px solid gray;")
 
-    def show(self, pos):
-        self.move(pos)
-        super().show()
+#     def setPixmap(self, pixmap):
+#         self.label.setPixmap(pixmap)
+
+#     def show(self, pos):
+#         self.move(pos)
+#         super().show()
 
     
 
@@ -88,28 +98,26 @@ class HoverLabel(QLabel):
         self.setAlignment(Qt.AlignCenter)
 
     def enterEvent(self, event):
-                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
-        pixmap = self.pixmap()
-        global width,height
-        if pixmap:
-            scaled_pixmap = pixmap.scaled(width*2, height*2, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.setPixmap(scaled_pixmap)
-            self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
-        self.setFixedSize(width*2, height*2)
+        if flag_hover:
+            pixmap = self.pixmap()
+            global width,height
+            if pixmap:
+                scaled_pixmap = pixmap.scaled(width*2, height*2, Qt.KeepAspectRatio, Qt.FastTransformation)
+                self.setPixmap(scaled_pixmap)
+                self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
+            self.setFixedSize(width*2, height*2)
 
     def leaveEvent(self, event):
-        # pixmap=QPixmap()
-        
-        # self.pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-        pixmap = self.pixmap()
-        global width,height
-        if pixmap:
-            scaled_pixmap = pixmap.scaled(width, height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.setPixmap(scaled_pixmap)
-            self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
-        self.setFixedSize(width, height)
+        if flag_hover:
+            pixmap=QPixmap()
+            pixmap = self.pixmap()
+            global width,height
+            if pixmap:
+                scaled_pixmap = pixmap.scaled(width, height, Qt.KeepAspectRatio, Qt.FastTransformation)
+                self.setPixmap(scaled_pixmap)
+                self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
+            self.setFixedSize(width, height)
 
-        self.setFixedSize(width, height)
         
         
 class ImageLabel(QLabel):
@@ -117,9 +125,7 @@ class ImageLabel(QLabel):
         super().__init__()
         self.setAlignment(Qt.AlignCenter)
         self.setText('\n\n Drop Image Here \n\n')
-        # self.setText.setSt
         self.setStyleSheet(
-
                 "color: black;"
                 "width: 500px;"
                 "background-color:#ECF9FF;"
@@ -160,7 +166,6 @@ class Project(QWidget):
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
         self.chkbxs=[]
         self.labels=[]
-        self.folder_dir='output/'
 
         self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
@@ -173,24 +178,18 @@ class Project(QWidget):
         self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        
         self.gird_generated = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.scrollArea.setStyleSheet("background-color:#93BFCF")
         
         
-        self.add_image_grid()   
+        self.add_image_grid()
+        ###############################   
         self.main_container.addWidget(self.scrollArea)
+        
         self.scrollArea.setMinimumWidth(500)
         
-        # self.scroll_area = QScrollArea(self)
-        # self.grid_widget = QWidget()
-        # self.grid_layout = QGridLayout(self.grid_widget)
-        # self.scroll_area.setWidget(self.grid_widget)
-        # self.load_images()
-
-        # # Set the layout of the main widget
-        # main_layout = QVBoxLayout(self)
-        # main_layout.addWidget(self.scroll_area)
 
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
@@ -233,6 +232,19 @@ class Project(QWidget):
         button_inv.clicked.connect(self.invertSelection)
         button_inv.setStyleSheet("background-color : white")
 
+        
+        self.b1 = QCheckBox("Hover over preview")
+        self.b1.stateChanged.connect(lambda:self.settings(self.b1))
+        self.b2 = QCheckBox("Show preview name")
+        self.b2.stateChanged.connect(lambda:self.settings(self.b2))
+        self.b3 = QCheckBox("Show preview")
+        self.b3.stateChanged.connect(lambda:self.settings(self.b3))
+        
+        
+        
+        
+        show_preview=False
+
 
         button_iden.setStyleSheet("""
         QPushButton {
@@ -259,11 +271,14 @@ class Project(QWidget):
         
         title_h_box_a = QHBoxLayout()
         title_h_box_a.addWidget(button_gen)
-        # title_h_box_a.addStretch(10)
         title_h_box_a.addWidget(button_add)
         title_h_box_b=QHBoxLayout()
         title_h_box_b.addWidget(button_iden)
         title_h_box_b.addWidget(button_inv)
+        title_h_box_c=QVBoxLayout()
+        title_h_box_c.addWidget(self.b1)
+        title_h_box_c.addWidget(self.b2)
+        title_h_box_c.addWidget(self.b3)
         
         # title_h_box_b.addStretch(10)
         # title_h_box.setSpacing(20)
@@ -277,9 +292,10 @@ class Project(QWidget):
         # text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
         title_v_box.addStretch(10)
+        
+        
+        
 
-        # title_v_box.setStretchFactor(text_noise, 1)
-        # hbox.setStretchFactor(line_edit, 1
 
         for label in noises:
             checkbox = QCheckBox(label, self)
@@ -305,7 +321,9 @@ class Project(QWidget):
 
 
         title_v_box.addLayout(title_h_box_a)     
-        title_v_box.addLayout(title_h_box_b)     
+        title_v_box.addLayout(title_h_box_b)
+        title_v_box.addLayout(title_h_box_c)     
+             
         self.main_container.addLayout(title_v_box)
 
         self.main_container.setStretchFactor(title_v_box, 1)
@@ -314,7 +332,32 @@ class Project(QWidget):
         self.setLayout(self.main_container)
         self.show()
 
-    
+    def settings(self,b):
+        m=b.text()
+        # update the settings 
+        # hover working others not working
+        global show_preview,flag_hover,show_name
+        if m == "Hover over preview":
+            if b.isChecked() == True:
+                flag_hover=True
+            else:
+                flag_hover=False
+        elif m=="Show preview name":
+            if b.isChecked() == True:
+                show_name=True
+            else:
+                show_name=False
+        elif m=="Show preview":
+            if b.isChecked() == True:
+                show_preview=True
+            else:
+                show_preview=False
+                
+            
+
+
+                
+                
     
     def impulse(self):
         generatedimages = []
@@ -416,35 +459,32 @@ class Project(QWidget):
 
     def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
-        # k=identify_image_in_noise(self.file_name)
+        
           
     def submit(self):
         import timeit
         start = timeit.default_timer()
+        # bar = QProgressBar(self)
         
         results = {}
         with concurrent.futures.ProcessPoolExecutor() as executor:
             for widget in self.chkbxs:
                 if isinstance(widget, QCheckBox) and widget.isChecked():
                     label = widget.text()
-                    # print(label)
-                    # print([label])
                     future=executor.submit(self.checkbox_functions[label])
                     results[label] = future 
                     print("Submitted future for checkbox:", label)
-                    # results[label] = future
-                    
-
-        # for label, future in results.items():
-        #     print(f'{label}: {future.result()}')
 
         concurrent.futures.wait(results.values())
+        
         for label, future in results.items():
+            if future.done():
+                time_taken = timeit.timeit(lambda: future.result(), number=1)
+                print(f"Time taken for '{label}': {time_taken:.6f} seconds")
                 result = future.result()
-                # print("Result for checkbox", label, ":", result)
         stop= timeit.default_timer()
         print(stop-start)
-        to_open = os.path.abspath(self.folder_dir)
+        to_open = os.path.abspath(folder_dir)
         subprocess.Popen(r'explorer ' + to_open)
         self.add_image_grid()
             
@@ -475,11 +515,9 @@ class Project(QWidget):
             
     def add_image_grid(self):
         
-        
-        self.folder_dir='output/'
-        isExist = os.path.exists(self.folder_dir)
+        isExist = os.path.exists(folder_dir)
         if not isExist:
-            os.makedirs(self.folder_dir)
+            os.makedirs(folder_dir)
             
         while self.gird_generated.count():
             child = self.gird_generated.takeAt(0)
@@ -492,38 +530,32 @@ class Project(QWidget):
             c=0
             max_r=3
             r=0
-            for image in os.listdir(self.folder_dir):
+            for image in os.listdir(folder_dir):
                 if (image.endswith(".jpg")):
                     small_grid=QGridLayout()
-                    self.name_image=os.path.join(self.folder_dir,image)
+                    self.name_image=os.path.join(folder_dir,image)
                     self.text_def=QLabel(self)
                     self.word_image=HoverLabel()
                     self.labels.append(self.word_image)
                     pixmap=QPixmap(self.name_image)
-                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
                     pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
                     self.text_def.setText(image)
+                    self.text_def.setFixedHeight(40)
                     self.text_def.setStyleSheet(
                            'background-color:#6096B4;'
-                           'font-size: 16pt; font-weight: italic;')
+                           'font-size: 10pt; font-weight: italic;')
                     self.word_image.setPixmap(pixmap)
-                    # self.word_image.mousePressEvent = self.openImage(name_image)
-                    
-                    
-                    # self.word_image.mousePressEvent = lambda event: self.openImage(self.name_image)
                     
                     def create_image_handler(image_name):
                         def handler(event):
                             self.openImage(image_name)
                         return handler
     
-    
                     self.word_image.mousePressEvent = create_image_handler(self.name_image)
                     
-                    
                     small_grid.addWidget(self.word_image,0,0)
-                    small_grid.addWidget(self.text_def,1,0)
-                    # print('"dasd')
+                    if show_name:
+                        small_grid.addWidget(self.text_def,1,0)
                     self.gird_generated.addLayout(small_grid,r,i)
                     
                     i=i+1
@@ -540,16 +572,11 @@ class Project(QWidget):
         except Exception as e:
             print("Image not found.",e) 
             
-
-        
+       
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         print(self.file_name)
         self.addedimages.append(self.file_name)
- 
- 
- 
- 
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -564,7 +591,6 @@ class Project(QWidget):
             event.ignore()
 
     def dropEvent(self, event):
-        
         if event.mimeData().hasImage:
             event.setDropAction(Qt.CopyAction)
             file_path = event.mimeData().urls()[0].toLocalFile()
@@ -574,18 +600,15 @@ class Project(QWidget):
             event.ignore()
 
     def set_image(self, file_path):
-        
         self.addedimages.append(file_path)
-        
         pixmap=QPixmap(file_path)
         print(file_path)
-        pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+        pixmap=pixmap.scaled(self.photoViewer.width(), self.photoViewer.height(), Qt.KeepAspectRatio, Qt.FastTransformation)
         pixmap.mousePressEvent = self.openImage
         self.photoViewer.setPixmap(pixmap)
         
-    def openImage(self, file_dir):    # Open a file dialog to select an image file
-        print(file_dir)
-        # print(os.getcwd())
+    def openImage(self, file_dir): 
+        print(file_dir) 
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
 if __name__ == '__main__':
