@@ -58,36 +58,63 @@ class ImageLabel(QLabel):
         super().setPixmap(image)
 
 class Project(QWidget):
+<<<<<<< Updated upstream
     
     
     
+=======
+    def test_multi_processing(self):
+        print("Using", multiprocessing.cpu_count(),"CPU cores")
+
+>>>>>>> Stashed changes
     def __getstate__(self):
         return {'some_data': self.addedimages}
 
     def __setstate__(self, state):
         self.addedimages = state['some_data']
         
-
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
-        self.setAcceptDrops(True)
+        radius = 150
         
+        self.setAcceptDrops(True)
 
     def intitalizeUI(self): 
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
-        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
+        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
+                'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
+        slider_one={'Gaussian','Gamma','Flimgrain','Pepper','Poisson','Speckle','Uniform'}
+        slider_two={'Anisotropic','Periodic'}
+        slider_no={'Impulse','Rayleigh'}
+        
+        #         anisotropic mean stddev
+        #   gaussian   peak (0-1)
+        # gamma   peak (0-1)
+        
+        # flimgrain flimgrain (idk 0-1)
+        
+        # impulse b/w why?? number_of_pixels = random.randint(300, 10000) why??
+        # pepper amountrange (idk 0-1)
+        # periodic noise_level noise_freq (idk 0-1)
+        # poisson (idk 0-1)
+        # add_rayleigh_noise why ?? function name?? scale=(0,100)
+        # speckle noise_level (idk 0-1)
+        # uniform intensity (idk 0-1)
+        
         self.chkbxs=[]
         self.labels=[]
+<<<<<<< Updated upstream
         self.folder_dir='output/'
 
+=======
+>>>>>>> Stashed changes
         self.main_container=QHBoxLayout()
+        
         self.photoViewer = ImageLabel()
         self.labels.append(self.photoViewer)
         self.main_container.addWidget(self.photoViewer)        
-        
-        
         self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
@@ -95,9 +122,9 @@ class Project(QWidget):
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.scrollArea.setStyleSheet("background-color:#93BFCF")
         
-        
         self.add_image_grid()
         self.main_container.addWidget(self.scrollArea)
+<<<<<<< Updated upstream
         # self.scroll_area = QScrollArea(self)
         # self.grid_widget = QWidget()
         # self.grid_layout = QGridLayout(self.grid_widget)
@@ -108,10 +135,14 @@ class Project(QWidget):
         # main_layout = QVBoxLayout(self)
         # main_layout.addWidget(self.scroll_area)
 
+=======
+        
+        self.scrollArea.setMinimumWidth(500)
+        
+>>>>>>> Stashed changes
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
         button_gen.clicked.connect(self.submit)
-
         button_gen.setStyleSheet("""
         QPushButton {
             background-color: white; 
@@ -122,7 +153,6 @@ class Project(QWidget):
         }
         """)
         
-
         button_add = QPushButton('Add images', self)
         self.labels.append(button_add)
         button_add.clicked.connect(self.add_image)
@@ -149,6 +179,18 @@ class Project(QWidget):
         button_inv.clicked.connect(self.invertSelection)
         button_inv.setStyleSheet("background-color : white")
 
+<<<<<<< Updated upstream
+=======
+        
+        self.b1 = QCheckBox("Hover over preview")
+        self.b1.stateChanged.connect(lambda:self.settings(self.b1))
+        self.b2 = QCheckBox("Show preview name")
+        self.b2.stateChanged.connect(lambda:self.settings(self.b2))
+        self.b3 = QCheckBox("Show preview")
+        self.b3.stateChanged.connect(lambda:self.settings(self.b3))
+        
+        show_preview=False
+>>>>>>> Stashed changes
 
         button_iden.setStyleSheet("""
         QPushButton {
@@ -168,10 +210,6 @@ class Project(QWidget):
              color:white;
         }
         """)
-
-
-        
-        
         
         title_h_box_a = QHBoxLayout()
         title_h_box_a.addWidget(button_gen)
@@ -180,27 +218,172 @@ class Project(QWidget):
         title_h_box_b=QHBoxLayout()
         title_h_box_b.addWidget(button_iden)
         title_h_box_b.addWidget(button_inv)
+<<<<<<< Updated upstream
         
         # title_h_box.addStretch()
         # title_h_box.setSpacing(20)
         
+=======
+        title_h_box_c=QVBoxLayout()
+        title_h_box_c.addWidget(self.b1)
+        title_h_box_c.addWidget(self.b2)
+        title_h_box_c.addWidget(self.b3)
+>>>>>>> Stashed changes
     
         title_v_box = QVBoxLayout()   
         title_v_box.setAlignment(Qt.AlignCenter)     
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
         self.labels.append(text_noise)
-        # text_noise.resize(100,100)
         title_v_box.addWidget(text_noise)
+<<<<<<< Updated upstream
         # title_v_box.setStretchFactor(text_noise, 1)
         # hbox.setStretchFactor(line_edit, 1
 
+=======
+        title_v_box.addStretch(10)
+        
+        """
+        anisotropic mean stddev
+        gaussian   peak (0-1)
+        flimgrain flimgrain (idk 0-1)
+        gamma   peak (0-1)
+        gaussian peak (0-1)
+        impulse b/w why?? number_of_pixels = random.randint(300, 10000) why??
+        pepper amountrange (idk 0-1)
+        periodic noise_level noise_freq (idk 0-1)
+        poisson (idk 0-1)
+        add_rayleigh_noise why ?? function name?? scale=(0,100)
+        speckle noise_level (idk 0-1)
+        uniform intensity (idk 0-1)
+        """
+>>>>>>> Stashed changes
         for label in noises:
+            layout = QHBoxLayout()
             checkbox = QCheckBox(label, self)
             self.labels.append(checkbox)
             self.chkbxs.append(checkbox)
+<<<<<<< Updated upstream
             title_v_box.addWidget(checkbox)
             title_v_box.setStretchFactor(checkbox, 0)
+=======
+            layout.addWidget(checkbox)
+            liders = {}
+            
+            def updateLabel(label, value):
+                    print(liders)
+                    print(liders[label])        
+                    liders[label].setText(str(value))
+                
+            
+            
+            # if label in slider_one:
+            #     sld = QSlider(Qt.Orientation.Horizontal)
+            #     sld.setFixedWidth(100)
+            #     sld.setRange(0, 1)
+            #     sld.setTickPosition(QSlider.TickPosition.TicksAbove)
+            #     layout.addWidget(sld)
+            #     result_label1 = QLabel('')
+            #     liders[label] = result_label1
+            #     sld.valueChanged.connect(lambda value: updateLabel(label, value))
+                
+            #     layout.addWidget(result_label1)
+
+            # if label in slider_two:
+            #     sld1 = QSlider(Qt.Orientation.Horizontal)
+            #     sld1.setFixedWidth(100)
+            #     sld1.setRange(0, 1)
+            #     sld1.setTickPosition(QSlider.TickPosition.TicksAbove)
+            #     layout.addWidget(sld1)    
+            #     result_label1 = QLabel('')
+            #     liders[label] = result_label1
+            #     layout.addWidget(result_label1)
+            #     sld1.valueChanged.connect(lambda value: updateLabel(label, value))
+                
+            #     sld2 = QSlider(Qt.Orientation.Horizontal)
+            #     sld2.setFixedWidth(100)
+            #     sld2.setRange(0, 1)
+            #     sld2.setTickPosition(QSlider.TickPosition.TicksAbove)
+            #     result_label2 = QLabel('')
+            #     layout.addWidget(sld2)
+            #     result_label2 = QLabel('')
+            #     liders[label] = result_label2
+            #     sld2.valueChanged.connect(lambda value: updateLabel(label, value))
+            #     layout.addWidget(result_label2)
+
+            # if label in slider_no:
+            #     textbox1 = QLineEdit()
+            #     textbox2 = QLineEdit()
+            #     layout.addWidget(textbox1)
+            #     layout.addWidget(textbox2)
+
+                
+                
+            # title_v_box.addLayout(layout)
+            # title_v_box.setStretchFactor(checkbox, 1)
+            # title_v_box.addStretch(10)
+        for label in noises:
+            layout = QHBoxLayout()
+            checkbox = QCheckBox(label, self)
+            self.labels.append(checkbox)
+            self.chkbxs.append(checkbox)
+            layout.addWidget(checkbox)
+            
+            
+            #REMVOVE THIS LINE AFTER SLIDER FIXED
+            title_v_box.addLayout(layout)
+            
+
+            def updateLabel(label, value):
+                label.setText(str(value))
+
+            # if label in slider_one:
+            #     sld = QSlider(Qt.Orientation.Horizontal)
+            #     sld.setFixedWidth(100)
+            #     sld.setRange(0, 1)
+            #     sld.setTickPosition(QSlider.TickPosition.TicksAbove)
+
+            #     result_label = QLabel('')
+            #     sld.valueChanged.connect(lambda value: updateLabel(result_label, value))
+
+            #     liders[sld] = result_label  # add slider and label to the dictionary
+
+            #     layout.addWidget(sld)
+            #     layout.addWidget(result_label)
+
+            # if label in slider_two:
+            #     sld1 = QSlider(Qt.Orientation.Horizontal)
+            #     sld1.setFixedWidth(100)
+            #     sld1.setRange(0, 1)
+            #     sld1.setTickPosition(QSlider.TickPosition.TicksAbove)
+
+            #     result_label1 = QLabel('')
+            #     sld1.valueChanged.connect(lambda value: updateLabel(result_label1, value))
+
+            #     liders[sld1] = result_label1  # add slider and label to the dictionary
+
+            #     layout.addWidget(sld1)
+            #     layout.addWidget(result_label1)
+
+            #     sld2 = QSlider(Qt.Orientation.Horizontal)
+            #     sld2.setFixedWidth(100)
+            #     sld2.setRange(0, 1)
+            #     sld2.setTickPosition(QSlider.TickPosition.TicksAbove)
+
+            #     result_label2 = QLabel('')
+            #     sld2.valueChanged.connect(lambda value: updateLabel(result_label2, value))
+
+            #     liders[sld2] = result_label2  # add slider and label to the dictionary
+
+            #     layout.addWidget(sld2)
+            #     layout.addWidget(result_label2)
+
+            # if label in slider_no:
+            #     textbox1 = QLineEdit()
+            #     textbox2 = QLineEdit()
+            #     layout.addWidget(textbox1)
+            #     layout.addWidget(textbox2)
+>>>>>>> Stashed changes
 
         self.checkbox_functions = {}
         self.checkbox_functions['Impulse'] = self.impulse
@@ -225,10 +408,36 @@ class Project(QWidget):
         
         self.styles()
         self.setLayout(self.main_container)
+        
         self.show()
 
+<<<<<<< Updated upstream
     
     
+=======
+    def settings(self,b):
+        m=b.text()
+        # update the settings 
+        # hover working others not working
+        global show_preview,flag_hover,show_name
+        if m == "Hover over preview":
+            if b.isChecked() == True:
+                flag_hover=True
+            else:
+                flag_hover=False
+        elif m=="Show preview name":
+            if b.isChecked() == True:
+                show_name=True
+            else:
+                show_name=False
+        elif m=="Show preview":
+            if b.isChecked() == True:
+                show_preview=True
+            else:
+                show_preview=False
+                
+            
+>>>>>>> Stashed changes
     def impulse(self):
         generatedimages = []
         for i in self.addedimages:
@@ -236,7 +445,6 @@ class Project(QWidget):
         for i in range(len(generatedimages)):
             print('output/impulse'+str(i+1)+'.jpg')
             cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
-
 
     def anisotropic(self):
         generatedimages = []
@@ -329,8 +537,12 @@ class Project(QWidget):
 
     def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
+<<<<<<< Updated upstream
         # k=identify_image_in_noise(self.file_name)
           
+=======
+        
+>>>>>>> Stashed changes
     def submit(self):
         import timeit
         start = timeit.default_timer()
@@ -370,7 +582,10 @@ class Project(QWidget):
                 widget.setChecked(False)
             else:
                 widget.setChecked(True)
-            
+    
+    
+        
+        
     def styles(self):
         font_loc="fonts/GothamMedium_1.ttf"
         font_id = QFontDatabase.addApplicationFont(font_loc)
@@ -435,6 +650,7 @@ class Project(QWidget):
                         i=0
                 self.gird_generated.update()
                 self.gird_generated.activate()
+<<<<<<< Updated upstream
             
             self.gird_generated.update()
             self.gird_generated.activate()
@@ -443,6 +659,17 @@ class Project(QWidget):
             
 
         
+=======
+            except Exception as e:
+                print("Image not found.",e) 
+        else:
+            while self.gird_generated.count():
+                child = self.gird_generated.takeAt(0)
+                if child.widget():
+                    child.widget().removeItem(item)
+            # self.gird_generated.activate()
+                
+>>>>>>> Stashed changes
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         print(self.file_name)
