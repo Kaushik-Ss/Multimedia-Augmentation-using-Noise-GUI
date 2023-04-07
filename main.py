@@ -26,24 +26,107 @@ from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
 from PyQt5 import QtCore,QtWidgets
 from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QWidget, QGridLayout, QPushButton
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout, QSplitter, QVBoxLayout
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QSizePolicy
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtCore import Qt
+
+# importing libraries
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import sys
 
 
-flag=0
-class ImageLabel(QLabel):
-    def test_multi_processing(self):
-        print("Using", multiprocessing.cpu_count(),"CPU cores")
+flag_hover=False
+show_name=False
+folder_dir='output/'
+open_folder_when_done=False
+show_preview=False
+width=256
+height=512
+
+# class HoverPopup(QWidget):
+#     def __init__(self, parent=None):
+#         super().__init__(parent)
+#         if flag_hover:
+#             self.label = QLabel(self)
+#             self.label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+#             self.label.setAlignment(Qt.AlignCenter)
+#             self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+#             self.setAttribute(Qt.WA_TranslucentBackground)
+#             self.setStyleSheet("background-color: white; border: 1px solid gray;")
+
+#     def setPixmap(self, pixmap):
+#         self.label.setPixmap(pixmap)
+
+#     def show(self, pos):
+#         self.move(pos)
+#         super().show()
 
     
+
+# class HoverLabel(QLabel):
+#     def __init__(self, parent=None):
+#         super().__init__(parent)
+#         self.hover_popup = HoverPopup(self)
+#         self.hover_popup.hide()
+#         self.setMouseTracking(True)
+#         self.setAlignment(Qt.AlignCenter)
+
+#     def enterEvent(self, event):
+#         pos = self.mapToGlobal(QPoint(0, self.height()))
+#         self.hover_popup.setPixmap(self.pixmap())
+#         self.hover_popup.show(pos)
+
+
+#     def leaveEvent(self, event):
+#         self.hover_popup.hide()
+
+#     def moveEvent(self, event):
+#         self.hover_popup.hide()
+#         # return super().moveEvent(a0)
+
+
+
+class HoverLabel(QLabel):
+    def __init__(self, parent=None):
+        QLabel.__init__(self, parent)
+        self.setStyleSheet("QLabel:hover { border: 2px solid red; }")
+        self.setAlignment(Qt.AlignCenter)
+
+    def enterEvent(self, event):
+        if flag_hover:
+            pixmap = self.pixmap()
+            global width,height
+            if pixmap:
+                scaled_pixmap = pixmap.scaled(width*2, height*2, Qt.KeepAspectRatio, Qt.FastTransformation)
+                self.setPixmap(scaled_pixmap)
+                self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
+            self.setFixedSize(width*2, height*2)
+
+    def leaveEvent(self, event):
+        if flag_hover:
+            pixmap=QPixmap()
+            pixmap = self.pixmap()
+            global width,height
+            if pixmap:
+                scaled_pixmap = pixmap.scaled(width, height, Qt.KeepAspectRatio, Qt.FastTransformation)
+                self.setPixmap(scaled_pixmap)
+                self.setFixedSize(scaled_pixmap.width(), scaled_pixmap.height())
+            self.setFixedSize(width, height)
+
         
         
+class ImageLabel(QLabel):
     def __init__(self):
         super().__init__()
-        self.test_multi_processing()
         self.setAlignment(Qt.AlignCenter)
         self.setText('\n\n Drop Image Here \n\n')
-        # self.setText.setSt
         self.setStyleSheet(
-
                 "color: black;"
                 "width: 500px;"
                 "background-color:#ECF9FF;"
@@ -58,33 +141,38 @@ class ImageLabel(QLabel):
         super().setPixmap(image)
 
 class Project(QWidget):
-<<<<<<< Updated upstream
-    
-    
-    
-=======
     def test_multi_processing(self):
         print("Using", multiprocessing.cpu_count(),"CPU cores")
 
->>>>>>> Stashed changes
+    
+    
+    
     def __getstate__(self):
         return {'some_data': self.addedimages}
 
     def __setstate__(self, state):
         self.addedimages = state['some_data']
         
+
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
-        radius = 150
-        
         self.setAcceptDrops(True)
+        
 
     def intitalizeUI(self): 
+        self.test_multi_processing()
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
+        self.chkbxs=[]
+        self.labels=[]
+        self.buttons=[]
+        self.move(0,0)
+                
+        
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
                 'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
+        
         slider_one={'Gaussian','Gamma','Flimgrain','Pepper','Poisson','Speckle','Uniform'}
         slider_two={'Anisotropic','Periodic'}
         slider_no={'Impulse','Rayleigh'}
@@ -103,69 +191,42 @@ class Project(QWidget):
         # speckle noise_level (idk 0-1)
         # uniform intensity (idk 0-1)
         
-        self.chkbxs=[]
-        self.labels=[]
-<<<<<<< Updated upstream
-        self.folder_dir='output/'
 
-=======
->>>>>>> Stashed changes
         self.main_container=QHBoxLayout()
-        
         self.photoViewer = ImageLabel()
+        # self.photoViewer.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+        self.photoViewer.setMinimumWidth(300);
         self.labels.append(self.photoViewer)
         self.main_container.addWidget(self.photoViewer)        
+        
+        
         self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        
         self.gird_generated = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.scrollArea.setStyleSheet("background-color:#93BFCF")
         
+        
         self.add_image_grid()
+        ###############################   
         self.main_container.addWidget(self.scrollArea)
-<<<<<<< Updated upstream
-        # self.scroll_area = QScrollArea(self)
-        # self.grid_widget = QWidget()
-        # self.grid_layout = QGridLayout(self.grid_widget)
-        # self.scroll_area.setWidget(self.grid_widget)
-        # self.load_images()
-
-        # # Set the layout of the main widget
-        # main_layout = QVBoxLayout(self)
-        # main_layout.addWidget(self.scroll_area)
-
-=======
         
         self.scrollArea.setMinimumWidth(500)
         
->>>>>>> Stashed changes
+
         button_gen = QPushButton('Generate', self)
         self.labels.append(button_gen)
         button_gen.clicked.connect(self.submit)
-        button_gen.setStyleSheet("""
-        QPushButton {
-            background-color: white; 
-        }
-        QPushButton:hover {
-             background-color:green;
-             color:white;
-        }
-        """)
+
+        self.buttons.append(button_gen)
         
+
         button_add = QPushButton('Add images', self)
         self.labels.append(button_add)
         button_add.clicked.connect(self.add_image)
-        button_add.setStyleSheet("""
-        QPushButton {
-            background-color: white; 
-        }
-        QPushButton:hover {
-             background-color:green;
-             color:white;
-
-        }
-        """)
+        self.buttons.append(button_add)
 
         button_iden = QPushButton('Add all noises', self)
         self.labels.append(button_iden)
@@ -179,8 +240,6 @@ class Project(QWidget):
         button_inv.clicked.connect(self.invertSelection)
         button_inv.setStyleSheet("background-color : white")
 
-<<<<<<< Updated upstream
-=======
         
         self.b1 = QCheckBox("Hover over preview")
         self.b1.stateChanged.connect(lambda:self.settings(self.b1))
@@ -188,86 +247,70 @@ class Project(QWidget):
         self.b2.stateChanged.connect(lambda:self.settings(self.b2))
         self.b3 = QCheckBox("Show preview")
         self.b3.stateChanged.connect(lambda:self.settings(self.b3))
+        self.b4 = QCheckBox("Open Output folder when done")
+        self.b4.stateChanged.connect(lambda:self.settings(self.b4))
+        
+        
+        
         
         show_preview=False
->>>>>>> Stashed changes
 
-        button_iden.setStyleSheet("""
-        QPushButton {
-            background-color: white; 
-        }
-        QPushButton:hover {
-             background-color:green;
-             color:white;
-        }
-        """)
-        button_inv.setStyleSheet("""
-        QPushButton {
-            background-color: white; 
-        }
-        QPushButton:hover {
-             background-color:green;
-             color:white;
-        }
-        """)
+
+        self.buttons.append(button_iden)
+        self.buttons.append(button_inv)
+        
+        
+        
         
         title_h_box_a = QHBoxLayout()
         title_h_box_a.addWidget(button_gen)
-        # title_h_box_a.addStretch()
         title_h_box_a.addWidget(button_add)
         title_h_box_b=QHBoxLayout()
         title_h_box_b.addWidget(button_iden)
         title_h_box_b.addWidget(button_inv)
-<<<<<<< Updated upstream
         
-        # title_h_box.addStretch()
-        # title_h_box.setSpacing(20)
-        
-=======
         title_h_box_c=QVBoxLayout()
         title_h_box_c.addWidget(self.b1)
         title_h_box_c.addWidget(self.b2)
         title_h_box_c.addWidget(self.b3)
->>>>>>> Stashed changes
+        title_h_box_c.addWidget(self.b4)
+        
+        
+        # title_h_box_b.addStretch(10)
+        # title_h_box.setSpacing(20)
+        
     
         title_v_box = QVBoxLayout()   
-        title_v_box.setAlignment(Qt.AlignCenter)     
+        title_v_box.setAlignment(Qt.AlignCenter) 
+        title_text_lable=QHBoxLayout()    
         text_noise=QLabel(self)
         text_noise.setText('Select noises to add')
         self.labels.append(text_noise)
-        title_v_box.addWidget(text_noise)
-<<<<<<< Updated upstream
-        # title_v_box.setStretchFactor(text_noise, 1)
-        # hbox.setStretchFactor(line_edit, 1
-
-=======
+        refresh_image=QPushButton('Refresh preview')
+        self.buttons.append(refresh_image)
+        # self.labels.append(refresh_image)
+        # self.button_iden.setChecked(False)
+        refresh_image.clicked.connect(self.add_image_grid)
+        # text_noise.resize(100,100)
+        title_text_lable.addWidget(text_noise)
+        title_text_lable.addWidget(refresh_image)
+        
+        title_v_box.addLayout(title_text_lable)
         title_v_box.addStretch(10)
         
-        """
-        anisotropic mean stddev
-        gaussian   peak (0-1)
-        flimgrain flimgrain (idk 0-1)
-        gamma   peak (0-1)
-        gaussian peak (0-1)
-        impulse b/w why?? number_of_pixels = random.randint(300, 10000) why??
-        pepper amountrange (idk 0-1)
-        periodic noise_level noise_freq (idk 0-1)
-        poisson (idk 0-1)
-        add_rayleigh_noise why ?? function name?? scale=(0,100)
-        speckle noise_level (idk 0-1)
-        uniform intensity (idk 0-1)
-        """
->>>>>>> Stashed changes
+        
+        
+
+
         for label in noises:
             layout = QHBoxLayout()
             checkbox = QCheckBox(label, self)
             self.labels.append(checkbox)
             self.chkbxs.append(checkbox)
-<<<<<<< Updated upstream
             title_v_box.addWidget(checkbox)
             title_v_box.setStretchFactor(checkbox, 0)
-=======
             layout.addWidget(checkbox)
+            title_v_box.addStretch(10)
             liders = {}
             
             def updateLabel(label, value):
@@ -322,20 +365,20 @@ class Project(QWidget):
             # title_v_box.addLayout(layout)
             # title_v_box.setStretchFactor(checkbox, 1)
             # title_v_box.addStretch(10)
-        for label in noises:
-            layout = QHBoxLayout()
-            checkbox = QCheckBox(label, self)
-            self.labels.append(checkbox)
-            self.chkbxs.append(checkbox)
-            layout.addWidget(checkbox)
+        # for label in noises:
+        #     layout = QHBoxLayout()
+        #     checkbox = QCheckBox(label, self)
+        #     self.labels.append(checkbox)
+        #     self.chkbxs.append(checkbox)
+        #     layout.addWidget(checkbox)
             
             
-            #REMVOVE THIS LINE AFTER SLIDER FIXED
-            title_v_box.addLayout(layout)
+        #     #REMVOVE THIS LINE AFTER SLIDER FIXED
+        #     title_v_box.addLayout(layout)
             
 
-            def updateLabel(label, value):
-                label.setText(str(value))
+        #     def updateLabel(label, value):
+        #         label.setText(str(value))
 
             # if label in slider_one:
             #     sld = QSlider(Qt.Orientation.Horizontal)
@@ -383,7 +426,6 @@ class Project(QWidget):
             #     textbox2 = QLineEdit()
             #     layout.addWidget(textbox1)
             #     layout.addWidget(textbox2)
->>>>>>> Stashed changes
 
         self.checkbox_functions = {}
         self.checkbox_functions['Impulse'] = self.impulse
@@ -401,20 +443,23 @@ class Project(QWidget):
 
 
         title_v_box.addLayout(title_h_box_a)     
-        title_v_box.addLayout(title_h_box_b)     
-        self.main_container.addLayout(title_v_box)
-
+        title_v_box.addLayout(title_h_box_b)
+        title_v_box.addLayout(title_h_box_c)     
+        title_v_box.setStretchFactor(title_h_box_a, 1)
+        title_v_box.setStretchFactor(title_h_box_b, 1)
+        title_v_box.setStretchFactor(title_h_box_c, 1)    
         self.main_container.setStretchFactor(title_v_box, 1)
+         
+        self.main_container.addLayout(title_v_box)
+        self.main_container.setStretchFactor(title_v_box, 1)
+        
+        
+        
         
         self.styles()
         self.setLayout(self.main_container)
-        
         self.show()
 
-<<<<<<< Updated upstream
-    
-    
-=======
     def settings(self,b):
         m=b.text()
         # update the settings 
@@ -435,9 +480,18 @@ class Project(QWidget):
                 show_preview=True
             else:
                 show_preview=False
+        elif m=="Open Output folder when done":
+            if b.isChecked() == True:
+                open_folder_when_done=True
+            else:
+                open_folder_when_done=False
                 
             
->>>>>>> Stashed changes
+
+
+                
+                
+    
     def impulse(self):
         generatedimages = []
         for i in self.addedimages:
@@ -445,6 +499,7 @@ class Project(QWidget):
         for i in range(len(generatedimages)):
             print('output/impulse'+str(i+1)+'.jpg')
             cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
+
 
     def anisotropic(self):
         generatedimages = []
@@ -537,40 +592,49 @@ class Project(QWidget):
 
     def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
-<<<<<<< Updated upstream
-        # k=identify_image_in_noise(self.file_name)
-          
-=======
         
->>>>>>> Stashed changes
+          
     def submit(self):
+        if len(self.addedimages) == 0:
+            print('Please enter')
+            ret = QMessageBox.question(self, 'Critical', "Add Images!", QMessageBox.Ok, QMessageBox.Cancel)
+            if ret==QMessageBox.Ok:
+                pass
+            else:
+                # for error close lol 
+                # need to remove this
+                QMessageBox(self, "Title", "Message")
+            return 
+        
+        
         import timeit
         start = timeit.default_timer()
+        # bar = QProgressBar(self)
         
         results = {}
         with concurrent.futures.ProcessPoolExecutor() as executor:
             for widget in self.chkbxs:
                 if isinstance(widget, QCheckBox) and widget.isChecked():
                     label = widget.text()
-                    # print(label)
-                    # print([label])
                     future=executor.submit(self.checkbox_functions[label])
                     results[label] = future 
                     print("Submitted future for checkbox:", label)
-                    # results[label] = future
-                    
 
-        # for label, future in results.items():
-        #     print(f'{label}: {future.result()}')
         concurrent.futures.wait(results.values())
+        
         for label, future in results.items():
+            if future.done():
+                time_taken = timeit.timeit(lambda: future.result(), number=1)
+                print(f"Time taken for '{label}': {time_taken:.6f} seconds")
                 result = future.result()
-                # print("Result for checkbox", label, ":", result)
         stop= timeit.default_timer()
-        print(stop-start)
-        to_open = os.path.abspath(self.folder_dir)
-        subprocess.Popen(r'explorer ' + to_open)
-        self.add_image_grid()
+        print('Completed in ',stop-start,'seconds')
+        if open_folder_when_done:
+            to_open = os.path.abspath(folder_dir)
+            subprocess.Popen(r'explorer ' + to_open)
+        self.gird_generated.update()
+        self.gird_generated.activate()
+        # self.add_image_grid()
             
     def on_stateChanged(self, state):
         for widget in self.chkbxs:
@@ -582,10 +646,7 @@ class Project(QWidget):
                 widget.setChecked(False)
             else:
                 widget.setChecked(True)
-    
-    
-        
-        
+            
     def styles(self):
         font_loc="fonts/GothamMedium_1.ttf"
         font_id = QFontDatabase.addApplicationFont(font_loc)
@@ -599,67 +660,73 @@ class Project(QWidget):
                            'font-size: 16pt; font-family: {}; font-weight: italic;'.format(font_family))
         for widget in self.labels:
             widget.setFont(font)
+        for widget in self.buttons:
+            widget.setStyleSheet("""
+        QPushButton {
+            background-color: white; 
+        }
+        QPushButton:hover {
+             background-color:green;
+             color:white;
+        }
+        """)
             
     def add_image_grid(self):
-        
-        
-        self.folder_dir='output/'
-        isExist = os.path.exists(self.folder_dir)
-        if not isExist:
-            os.makedirs(self.folder_dir)
-            
-        while self.gird_generated.count():
-            child = self.gird_generated.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
+        if show_preview:
+            isExist = os.path.exists(folder_dir)
+            if not isExist:
+                os.makedirs(folder_dir)
                 
-        try:
-            i=0
-            c=0
-            max_r=3
-            r=0
-            for image in os.listdir(self.folder_dir):
-                if (image.endswith(".jpg")):
-                    self.name_image=os.path.join(self.folder_dir,image)
-                    self.word_image=QLabel(self)
-                    self.labels.append(self.word_image)
-                    pixmap=QPixmap(self.name_image)
-                    # pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
-                    pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+            while self.gird_generated.count():
+                child = self.gird_generated.takeAt(0)
+                if child.widget():
+                    child.widget().deleteLater()
                     
-                    self.word_image.setPixmap(pixmap)
-                    # self.word_image.mousePressEvent = self.openImage(name_image)
-                    
-                    
-                    # self.word_image.mousePressEvent = lambda event: self.openImage(self.name_image)
-                    
-                    def create_image_handler(image_name):
-                        def handler(event):
-                            self.openImage(image_name)
-                        return handler
-    
-    
-                    self.word_image.mousePressEvent = create_image_handler(self.name_image)
-                    
-                    
+            try:
+                # splitter = QSplitter(Qt.Horizontal, self)
+                i=0
+                c=0
+                max_r=3
+                r=0
+                for image in os.listdir(folder_dir):
+                    if (image.endswith(".jpg")):
+                        small_grid=QGridLayout()
+                        self.name_image=os.path.join(folder_dir,image)
+                        self.text_def=QLabel(self)
+                        self.word_image=HoverLabel()
+                        self.labels.append(self.word_image)
+                        pixmap=QPixmap(self.name_image)
+                        pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                        self.text_def.setText(image)
+                        self.text_def.setFixedHeight(40)
+                        self.text_def.setStyleSheet(
+                            'background-color:#6096B4;'
+                            'font-size: 10pt; font-weight: italic;')
+                        self.word_image.setPixmap(pixmap)
+                        
+                        def create_image_handler(image_name):
+                            def handler(event):
+                                self.openImage(image_name)
+                            return handler
+        
+                        self.word_image.mousePressEvent = create_image_handler(self.name_image)
+                        
+                        small_grid.addWidget(self.word_image,0,0)
+                        if show_name:
+                            small_grid.addWidget(self.text_def,1,0)
+                        self.gird_generated.addLayout(small_grid,r,i)
+                        
+                        i=i+1
+                        if i==max_r:
+                            r+=1
+                            i=0
+                    # self.gird_generated.setMinimumWidth(500)
 
-                    self.gird_generated.addWidget(self.word_image,r,i)
-                    i=i+1
-                    if i==max_r:
-                        r+=1
-                        i=0
+                    self.gird_generated.update()
+                    self.gird_generated.activate()
+                
                 self.gird_generated.update()
                 self.gird_generated.activate()
-<<<<<<< Updated upstream
-            
-            self.gird_generated.update()
-            self.gird_generated.activate()
-        except Exception as e:
-            print("Image not found.",e) 
-            
-
-        
-=======
             except Exception as e:
                 print("Image not found.",e) 
         else:
@@ -669,15 +736,11 @@ class Project(QWidget):
                     child.widget().removeItem(item)
             # self.gird_generated.activate()
                 
->>>>>>> Stashed changes
+       
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         print(self.file_name)
         self.addedimages.append(self.file_name)
- 
- 
- 
- 
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:
@@ -692,7 +755,6 @@ class Project(QWidget):
             event.ignore()
 
     def dropEvent(self, event):
-        
         if event.mimeData().hasImage:
             event.setDropAction(Qt.CopyAction)
             file_path = event.mimeData().urls()[0].toLocalFile()
@@ -702,18 +764,17 @@ class Project(QWidget):
             event.ignore()
 
     def set_image(self, file_path):
-        
         self.addedimages.append(file_path)
-        
         pixmap=QPixmap(file_path)
         print(file_path)
-        pixmap=pixmap.scaled(128, 256, Qt.KeepAspectRatio, Qt.FastTransformation)
+        pixmap=pixmap.scaled(self.photoViewer.width(), self.photoViewer.height(), Qt.KeepAspectRatio, Qt.FastTransformation)
         pixmap.mousePressEvent = self.openImage
         self.photoViewer.setPixmap(pixmap)
         
-    def openImage(self, file_dir):    # Open a file dialog to select an image file
-        print(file_dir)
-        # print(os.getcwd())
+    def openImage(self, file_dir): 
+        # self.gird_generated.update()
+        # self.gird_generated.activate()
+        print(file_dir) 
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
 if __name__ == '__main__':
