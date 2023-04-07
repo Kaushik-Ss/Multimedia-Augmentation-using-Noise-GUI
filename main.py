@@ -44,6 +44,7 @@ import sys
 flag_hover=False
 show_name=False
 folder_dir='output/'
+open_folder_when_done=False
 show_preview=False
 width=256
 height=512
@@ -163,9 +164,32 @@ class Project(QWidget):
         self.test_multi_processing()
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
-        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential','Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
         self.chkbxs=[]
         self.labels=[]
+        self.move(0,0)
+                
+        
+        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
+                'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
+        
+        slider_one={'Gaussian','Gamma','Flimgrain','Pepper','Poisson','Speckle','Uniform'}
+        slider_two={'Anisotropic','Periodic'}
+        slider_no={'Impulse','Rayleigh'}
+        
+        #         anisotropic mean stddev
+        #   gaussian   peak (0-1)
+        # gamma   peak (0-1)
+        
+        # flimgrain flimgrain (idk 0-1)
+        
+        # impulse b/w why?? number_of_pixels = random.randint(300, 10000) why??
+        # pepper amountrange (idk 0-1)
+        # periodic noise_level noise_freq (idk 0-1)
+        # poisson (idk 0-1)
+        # add_rayleigh_noise why ?? function name?? scale=(0,100)
+        # speckle noise_level (idk 0-1)
+        # uniform intensity (idk 0-1)
+        
 
         self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
@@ -239,6 +263,8 @@ class Project(QWidget):
         self.b2.stateChanged.connect(lambda:self.settings(self.b2))
         self.b3 = QCheckBox("Show preview")
         self.b3.stateChanged.connect(lambda:self.settings(self.b3))
+        self.b4 = QCheckBox("Open Output folder when done")
+        self.b4.stateChanged.connect(lambda:self.settings(self.b4))
         
         
         
@@ -279,6 +305,8 @@ class Project(QWidget):
         title_h_box_c.addWidget(self.b1)
         title_h_box_c.addWidget(self.b2)
         title_h_box_c.addWidget(self.b3)
+        title_h_box_c.addWidget(self.b4)
+        
         
         # title_h_box_b.addStretch(10)
         # title_h_box.setSpacing(20)
@@ -298,12 +326,129 @@ class Project(QWidget):
 
 
         for label in noises:
+            layout = QHBoxLayout()
             checkbox = QCheckBox(label, self)
             self.labels.append(checkbox)
             self.chkbxs.append(checkbox)
             title_v_box.addWidget(checkbox)
-            title_v_box.setStretchFactor(checkbox, 1)
+            title_v_box.setStretchFactor(checkbox, 0)
+            layout.addWidget(checkbox)
             title_v_box.addStretch(10)
+            liders = {}
+            
+            def updateLabel(label, value):
+                    print(liders)
+                    print(liders[label])        
+                    liders[label].setText(str(value))
+                
+            
+            
+            # if label in slider_one:
+            #     sld = QSlider(Qt.Orientation.Horizontal)
+            #     sld.setFixedWidth(100)
+            #     sld.setRange(0, 1)
+            #     sld.setTickPosition(QSlider.TickPosition.TicksAbove)
+            #     layout.addWidget(sld)
+            #     result_label1 = QLabel('')
+            #     liders[label] = result_label1
+            #     sld.valueChanged.connect(lambda value: updateLabel(label, value))
+                
+            #     layout.addWidget(result_label1)
+
+            # if label in slider_two:
+            #     sld1 = QSlider(Qt.Orientation.Horizontal)
+            #     sld1.setFixedWidth(100)
+            #     sld1.setRange(0, 1)
+            #     sld1.setTickPosition(QSlider.TickPosition.TicksAbove)
+            #     layout.addWidget(sld1)    
+            #     result_label1 = QLabel('')
+            #     liders[label] = result_label1
+            #     layout.addWidget(result_label1)
+            #     sld1.valueChanged.connect(lambda value: updateLabel(label, value))
+                
+            #     sld2 = QSlider(Qt.Orientation.Horizontal)
+            #     sld2.setFixedWidth(100)
+            #     sld2.setRange(0, 1)
+            #     sld2.setTickPosition(QSlider.TickPosition.TicksAbove)
+            #     result_label2 = QLabel('')
+            #     layout.addWidget(sld2)
+            #     result_label2 = QLabel('')
+            #     liders[label] = result_label2
+            #     sld2.valueChanged.connect(lambda value: updateLabel(label, value))
+            #     layout.addWidget(result_label2)
+
+            # if label in slider_no:
+            #     textbox1 = QLineEdit()
+            #     textbox2 = QLineEdit()
+            #     layout.addWidget(textbox1)
+            #     layout.addWidget(textbox2)
+
+                
+                
+            # title_v_box.addLayout(layout)
+            # title_v_box.setStretchFactor(checkbox, 1)
+            # title_v_box.addStretch(10)
+        # for label in noises:
+        #     layout = QHBoxLayout()
+        #     checkbox = QCheckBox(label, self)
+        #     self.labels.append(checkbox)
+        #     self.chkbxs.append(checkbox)
+        #     layout.addWidget(checkbox)
+            
+            
+        #     #REMVOVE THIS LINE AFTER SLIDER FIXED
+        #     title_v_box.addLayout(layout)
+            
+
+        #     def updateLabel(label, value):
+        #         label.setText(str(value))
+
+            # if label in slider_one:
+            #     sld = QSlider(Qt.Orientation.Horizontal)
+            #     sld.setFixedWidth(100)
+            #     sld.setRange(0, 1)
+            #     sld.setTickPosition(QSlider.TickPosition.TicksAbove)
+
+            #     result_label = QLabel('')
+            #     sld.valueChanged.connect(lambda value: updateLabel(result_label, value))
+
+            #     liders[sld] = result_label  # add slider and label to the dictionary
+
+            #     layout.addWidget(sld)
+            #     layout.addWidget(result_label)
+
+            # if label in slider_two:
+            #     sld1 = QSlider(Qt.Orientation.Horizontal)
+            #     sld1.setFixedWidth(100)
+            #     sld1.setRange(0, 1)
+            #     sld1.setTickPosition(QSlider.TickPosition.TicksAbove)
+
+            #     result_label1 = QLabel('')
+            #     sld1.valueChanged.connect(lambda value: updateLabel(result_label1, value))
+
+            #     liders[sld1] = result_label1  # add slider and label to the dictionary
+
+            #     layout.addWidget(sld1)
+            #     layout.addWidget(result_label1)
+
+            #     sld2 = QSlider(Qt.Orientation.Horizontal)
+            #     sld2.setFixedWidth(100)
+            #     sld2.setRange(0, 1)
+            #     sld2.setTickPosition(QSlider.TickPosition.TicksAbove)
+
+            #     result_label2 = QLabel('')
+            #     sld2.valueChanged.connect(lambda value: updateLabel(result_label2, value))
+
+            #     liders[sld2] = result_label2  # add slider and label to the dictionary
+
+            #     layout.addWidget(sld2)
+            #     layout.addWidget(result_label2)
+
+            # if label in slider_no:
+            #     textbox1 = QLineEdit()
+            #     textbox2 = QLineEdit()
+            #     layout.addWidget(textbox1)
+            #     layout.addWidget(textbox2)
 
         self.checkbox_functions = {}
         self.checkbox_functions['Impulse'] = self.impulse
@@ -323,10 +468,16 @@ class Project(QWidget):
         title_v_box.addLayout(title_h_box_a)     
         title_v_box.addLayout(title_h_box_b)
         title_v_box.addLayout(title_h_box_c)     
-             
-        self.main_container.addLayout(title_v_box)
-
+        title_v_box.setStretchFactor(title_h_box_a, 1)
+        title_v_box.setStretchFactor(title_h_box_b, 1)
+        title_v_box.setStretchFactor(title_h_box_c, 1)    
         self.main_container.setStretchFactor(title_v_box, 1)
+         
+        self.main_container.addLayout(title_v_box)
+        self.main_container.setStretchFactor(title_v_box, 1)
+        
+        
+        
         
         self.styles()
         self.setLayout(self.main_container)
@@ -352,6 +503,11 @@ class Project(QWidget):
                 show_preview=True
             else:
                 show_preview=False
+        elif m=="Open Output folder when done":
+            if b.isChecked() == True:
+                open_folder_when_done=True
+            else:
+                open_folder_when_done=False
                 
             
 
@@ -496,9 +652,12 @@ class Project(QWidget):
                 result = future.result()
         stop= timeit.default_timer()
         print('Completed in ',stop-start,'seconds')
-        to_open = os.path.abspath(folder_dir)
-        subprocess.Popen(r'explorer ' + to_open)
-        self.add_image_grid()
+        if open_folder_when_done:
+            to_open = os.path.abspath(folder_dir)
+            subprocess.Popen(r'explorer ' + to_open)
+        self.gird_generated.update()
+        self.gird_generated.activate()
+        # self.add_image_grid()
             
     def on_stateChanged(self, state):
         for widget in self.chkbxs:
@@ -626,6 +785,8 @@ class Project(QWidget):
         self.photoViewer.setPixmap(pixmap)
         
     def openImage(self, file_dir): 
+        # self.gird_generated.update()
+        # self.gird_generated.activate()
         print(file_dir) 
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
