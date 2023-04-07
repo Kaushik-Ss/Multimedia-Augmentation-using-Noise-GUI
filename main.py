@@ -144,22 +144,17 @@ class Project(QWidget):
     def test_multi_processing(self):
         print("Using", multiprocessing.cpu_count(),"CPU cores")
 
-    
-    
-    
     def __getstate__(self):
         return {'some_data': self.addedimages}
 
     def __setstate__(self, state):
         self.addedimages = state['some_data']
         
-
     def __init__(self):
         super().__init__()
         self.intitalizeUI()
         self.setAcceptDrops(True)
         
-
     def intitalizeUI(self): 
         self.test_multi_processing()
         self.setWindowTitle('Image Augment')
@@ -486,12 +481,6 @@ class Project(QWidget):
             else:
                 open_folder_when_done=False
                 
-            
-
-
-                
-                
-    
     def impulse(self):
         generatedimages = []
         for i in self.addedimages:
@@ -499,7 +488,6 @@ class Project(QWidget):
         for i in range(len(generatedimages)):
             print('output/impulse'+str(i+1)+'.jpg')
             cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
-
 
     def anisotropic(self):
         generatedimages = []
@@ -592,8 +580,7 @@ class Project(QWidget):
 
     def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
-        
-          
+                  
     def submit(self):
         if len(self.addedimages) == 0:
             print('Please enter')
@@ -730,13 +717,18 @@ class Project(QWidget):
             except Exception as e:
                 print("Image not found.",e) 
         else:
-            while self.gird_generated.count():
-                child = self.gird_generated.takeAt(0)
-                if child.widget():
-                    child.widget().removeItem(item)
-            # self.gird_generated.activate()
-                
+            self.deleteItemsOfLayout(self.gird_generated)
        
+    def deleteItemsOfLayout(self,layout):
+         if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.setParent(None)
+                else:
+                    self.deleteItemsOfLayout(item.layout())
+
     def add_image(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
         print(self.file_name)
