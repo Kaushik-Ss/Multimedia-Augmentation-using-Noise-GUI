@@ -156,6 +156,8 @@ class Project(QWidget):
         self.setAcceptDrops(True)
         
     def intitalizeUI(self): 
+        self.plot_splitter = QSplitter(Qt.Horizontal)
+        
         self.test_multi_processing()
         self.setWindowTitle('Image Augment')
         self.addedimages=[]
@@ -164,7 +166,6 @@ class Project(QWidget):
         self.buttons=[]
         self.move(0,0)
                 
-        
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
                 'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
         
@@ -190,25 +191,64 @@ class Project(QWidget):
         self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
         # self.photoViewer.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-        self.photoViewer.setMinimumWidth(300);
+        
         self.labels.append(self.photoViewer)
-        self.main_container.addWidget(self.photoViewer)        
-        
-        
+        self.plot_splitter.addWidget(self.photoViewer)
+        # self.main_container.addWidget(self.photoViewer)        
+        # self.plot_splitter = QSplitter(Qt.Vertical)
         self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        # self.plot_splitter.setWidgetResizable(True)
         
-        self.gird_generated = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        # self.gird_generated.setWidgetResizable(True)
+        
+        # self.self.scrollAreaWidgetContents = QWidget()
+        # self.gird_generated.setLayout(self.plot_grid)
+
+        # self.plot_splitter.addWidget(self.scrollArea)
+        # self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        
+        # self.gird_generated = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        # self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        
+        # self.plot_splitter = QSplitter(Qt.Vertical)
+        
+        def helperSetSliderIntValue(self, slider, x):
+            slider.tracking = True
+            slider.value = int(x)
+            slider.sliderPosition = int(x)
+            slider.update()
+            slider.repaint()
+        
+        
+        self.gird_generated = QGridLayout()
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setLayout(self.gird_generated)
+
+        self.plot_splitter.addWidget(self.scrollAreaWidgetContents)
+        # self.plot_splitter.setStyleSheet(
+        #                     'background-color:#ff0000')
+        self.main_container.addWidget(self.plot_splitter)
+        
+        # self.plot_splitter
         self.scrollArea.setStyleSheet("background-color:#93BFCF")
+        # self.plot_splitter = QSplitter(Qt.Vertical)
+        # self.plot_grid = QGridLayout()
+        # self.scrollArea.fit
+        self.scrollArea.setContentsMargins(10, 10, 10, 10)
+        # self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        # self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setWidgetResizable(True)
+            
         
         
         self.add_image_grid()
         ###############################   
-        self.main_container.addWidget(self.scrollArea)
+        # self.main_container.addWidget(self.plot_splitter)
+        self.main_container.addStretch(10)
         
-        self.scrollArea.setMinimumWidth(500)
+        # self.Q.setMinimumWidth(200)
+        
         
 
         button_gen = QPushButton('Generate', self)
@@ -436,7 +476,7 @@ class Project(QWidget):
         self.checkbox_functions['Speckle'] = self.speckle
         self.checkbox_functions['Uniform'] = self.uniform
 
-
+        self.noise_label = QWidget()
         title_v_box.addLayout(title_h_box_a)     
         title_v_box.addLayout(title_h_box_b)
         title_v_box.addLayout(title_h_box_c)     
@@ -444,9 +484,28 @@ class Project(QWidget):
         title_v_box.setStretchFactor(title_h_box_b, 1)
         title_v_box.setStretchFactor(title_h_box_c, 1)    
         self.main_container.setStretchFactor(title_v_box, 1)
-         
-        self.main_container.addLayout(title_v_box)
-        self.main_container.setStretchFactor(title_v_box, 1)
+        # title_v_box.
+        
+        self.noise_label.setLayout(title_v_box)
+        # self.title_v_box.setMinimumWidth(200)
+        self.noise_label.setMinimumWidth(600)
+        self.scrollArea.setMinimumWidth(200)
+        self.photoViewer.setMinimumWidth(300);
+        self.plot_splitter.setMinimumWidth(100)
+        # self.plot_splitter.setMinimumWidth(500)
+        self.photoViewer.setMinimumSize(300, 0)
+        self.scrollArea.setMinimumSize(200, 0)
+        self.noise_label.setMinimumSize(600, 0)
+        self.plot_splitter.addWidget(self.noise_label)
+        self.plot_splitter.setSizes([300,600,500])
+        self.plot_splitter.setStyleSheet("QSplitter::handle { width: 10px;color:red; }")
+        
+        self.plot_splitter.setStretchFactor(0, 10)
+        self.plot_splitter.setStretchFactor(1, 100)
+        self.plot_splitter.setStretchFactor(2, 10)
+        self.scrollAreaWidgetContents.setStyleSheet("background-color: #87cefa ")
+        
+        # self.main_container.setStretchFactor(title_v_box, 1)
         
         
         
