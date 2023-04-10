@@ -45,7 +45,8 @@ flag_hover=False
 show_name=False
 folder_dir='output/'
 open_folder_when_done=False
-show_preview=False
+show_preview=True
+last_refreshed=0
 width=256
 height=512
 
@@ -162,7 +163,8 @@ class Project(QWidget):
         self.chkbxs=[]
         self.labels=[]
         self.buttons=[]
-        self.move(0,0)
+        # self.move(0,0)
+        self.setWindowState(QtCore.Qt.WindowMaximized)
                 
         
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
@@ -208,7 +210,7 @@ class Project(QWidget):
         ###############################   
         self.main_container.addWidget(self.scrollArea)
         
-        self.scrollArea.setMinimumWidth(500)
+        self.scrollArea.setMinimumWidth(1000)
         
 
         button_gen = QPushButton('Generate', self)
@@ -240,15 +242,15 @@ class Project(QWidget):
         self.b1.stateChanged.connect(lambda:self.settings(self.b1))
         self.b2 = QCheckBox("Show preview name")
         self.b2.stateChanged.connect(lambda:self.settings(self.b2))
-        self.b3 = QCheckBox("Show preview")
-        self.b3.stateChanged.connect(lambda:self.settings(self.b3))
+        # self.b3 = QCheckBox("Show preview")
+        # self.b3.stateChanged.connect(lambda:self.settings(self.b3))
         self.b4 = QCheckBox("Open Output folder when done")
         self.b4.stateChanged.connect(lambda:self.settings(self.b4))
         
         
         
         
-        show_preview=False
+        show_preview=True
 
 
         self.buttons.append(button_iden)
@@ -267,7 +269,7 @@ class Project(QWidget):
         title_h_box_c=QVBoxLayout()
         title_h_box_c.addWidget(self.b1)
         title_h_box_c.addWidget(self.b2)
-        title_h_box_c.addWidget(self.b3)
+        # title_h_box_c.addWidget(self.b3)
         title_h_box_c.addWidget(self.b4)
         
         
@@ -285,7 +287,7 @@ class Project(QWidget):
         self.buttons.append(refresh_image)
         # self.labels.append(refresh_image)
         # self.button_iden.setChecked(False)
-        refresh_image.clicked.connect(self.add_image_grid)
+        refresh_image.clicked.connect(self.refresh)
         # text_noise.resize(100,100)
         title_text_lable.addWidget(text_noise)
         title_text_lable.addWidget(refresh_image)
@@ -488,7 +490,11 @@ class Project(QWidget):
         for i in range(len(generatedimages)):
             print('output/impulse'+str(i+1)+'.jpg')
             cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
-
+    def refresh(self):
+        global last_refreshed
+        if time.time()-last_refreshed > 2:
+            self.add_image_grid()
+            last_refreshed = time.time()
     def anisotropic(self):
         generatedimages = []
         for i in self.addedimages:
