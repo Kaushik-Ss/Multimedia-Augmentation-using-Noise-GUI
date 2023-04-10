@@ -164,7 +164,9 @@ class Project(QWidget):
         self.chkbxs=[]
         self.labels=[]
         self.buttons=[]
-        self.move(0,0)
+        # self.move(0,0)
+        # self.showMaximized()
+        self.setWindowState(QtCore.Qt.WindowMaximized)
                 
         noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
                 'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
@@ -277,11 +279,14 @@ class Project(QWidget):
 
         
         self.b1 = QCheckBox("Hover over preview")
+        self.b1.hide()
         self.b1.stateChanged.connect(lambda:self.settings(self.b1))
         self.b2 = QCheckBox("Show preview name")
         self.b2.stateChanged.connect(lambda:self.settings(self.b2))
+        self.b2.setChecked(True)
         self.b3 = QCheckBox("Show preview")
         self.b3.stateChanged.connect(lambda:self.settings(self.b3))
+        self.b3.setChecked(True)
         self.b4 = QCheckBox("Open Output folder when done")
         self.b4.stateChanged.connect(lambda:self.settings(self.b4))
         
@@ -326,6 +331,7 @@ class Project(QWidget):
         # self.labels.append(refresh_image)
         # self.button_iden.setChecked(False)
         refresh_image.clicked.connect(self.add_image_grid)
+        refresh_image.click()
         # text_noise.resize(100,100)
         title_text_lable.addWidget(text_noise)
         title_text_lable.addWidget(refresh_image)
@@ -742,7 +748,7 @@ class Project(QWidget):
                         self.word_image=HoverLabel()
                         self.labels.append(self.word_image)
                         pixmap=QPixmap(self.name_image)
-                        pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                        pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio)
                         self.text_def.setText(image)
                         self.text_def.setFixedHeight(40)
                         self.text_def.setStyleSheet(
