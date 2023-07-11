@@ -384,6 +384,7 @@ class Project(QWidget):
             #     layout.addWidget(result_label1)
             #     sld1.valueChanged.connect(lambda value: updateLabel(label, value))
                 
+                
             #     sld2 = QSlider(Qt.Orientation.Horizontal)
             #     sld2.setFixedWidth(100)
             #     sld2.setRange(0, 1)
