@@ -49,50 +49,6 @@ show_preview=True
 last_refreshed=0
 width=256
 height=512
-
-# class HoverPopup(QWidget):
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-#         if flag_hover:
-#             self.label = QLabel(self)
-#             self.label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
-#             self.label.setAlignment(Qt.AlignCenter)
-#             self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-#             self.setAttribute(Qt.WA_TranslucentBackground)
-#             self.setStyleSheet("background-color: white; border: 1px solid gray;")
-
-#     def setPixmap(self, pixmap):
-#         self.label.setPixmap(pixmap)
-
-#     def show(self, pos):
-#         self.move(pos)
-#         super().show()
-
-    
-
-# class HoverLabel(QLabel):
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-#         self.hover_popup = HoverPopup(self)
-#         self.hover_popup.hide()
-#         self.setMouseTracking(True)
-#         self.setAlignment(Qt.AlignCenter)
-
-#     def enterEvent(self, event):
-#         pos = self.mapToGlobal(QPoint(0, self.height()))
-#         self.hover_popup.setPixmap(self.pixmap())
-#         self.hover_popup.show(pos)
-
-
-#     def leaveEvent(self, event):
-#         self.hover_popup.hide()
-
-#     def moveEvent(self, event):
-#         self.hover_popup.hide()
-#         # return super().moveEvent(a0)
-
-
-
 class HoverLabel(QLabel):
     def __init__(self, parent=None):
         QLabel.__init__(self, parent)
@@ -140,7 +96,8 @@ class ImageLabel(QLabel):
 
     def setPixmap(self, image):
         super().setPixmap(image)
-
+noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
+                'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
 class Project(QWidget):
     def test_multi_processing(self):
         print("Using", multiprocessing.cpu_count(),"CPU cores")
@@ -167,12 +124,15 @@ class Project(QWidget):
         self.setWindowState(QtCore.Qt.WindowMaximized)
                 
         
-        noises=['Impulse','Gaussian','Periodic','Speckle','Anisotropic','Exponential',
-                'Flimgrain','Gamma','Pepper','Poisson','Rayleigh','Uniform']
+        
         
         slider_one={'Gaussian','Gamma','Flimgrain','Pepper','Poisson','Speckle','Uniform'}
         slider_two={'Anisotropic','Periodic'}
         slider_no={'Impulse','Rayleigh'}
+
+
+        
+
         
         #         anisotropic mean stddev
         #   gaussian   peak (0-1)
@@ -314,130 +274,20 @@ class Project(QWidget):
                     print(liders)
                     print(liders[label])        
                     liders[label].setText(str(value))
-                
-            
-            
-            # if label in slider_one:
-            #     sld = QSlider(Qt.Orientation.Horizontal)
-            #     sld.setFixedWidth(100)
-            #     sld.setRange(0, 1)
-            #     sld.setTickPosition(QSlider.TickPosition.TicksAbove)
-            #     layout.addWidget(sld)
-            #     result_label1 = QLabel('')
-            #     liders[label] = result_label1
-            #     sld.valueChanged.connect(lambda value: updateLabel(label, value))
-                
-            #     layout.addWidget(result_label1)
 
-            # if label in slider_two:
-            #     sld1 = QSlider(Qt.Orientation.Horizontal)
-            #     sld1.setFixedWidth(100)
-            #     sld1.setRange(0, 1)
-            #     sld1.setTickPosition(QSlider.TickPosition.TicksAbove)
-            #     layout.addWidget(sld1)    
-            #     result_label1 = QLabel('')
-            #     liders[label] = result_label1
-            #     layout.addWidget(result_label1)
-            #     sld1.valueChanged.connect(lambda value: updateLabel(label, value))
-                
-            #     sld2 = QSlider(Qt.Orientation.Horizontal)
-            #     sld2.setFixedWidth(100)
-            #     sld2.setRange(0, 1)
-            #     sld2.setTickPosition(QSlider.TickPosition.TicksAbove)
-            #     result_label2 = QLabel('')
-            #     layout.addWidget(sld2)
-            #     result_label2 = QLabel('')
-            #     liders[label] = result_label2
-            #     sld2.valueChanged.connect(lambda value: updateLabel(label, value))
-            #     layout.addWidget(result_label2)
-
-            # if label in slider_no:
-            #     textbox1 = QLineEdit()
-            #     textbox2 = QLineEdit()
-            #     layout.addWidget(textbox1)
-            #     layout.addWidget(textbox2)
-
-                
-                
-            # title_v_box.addLayout(layout)
-            # title_v_box.setStretchFactor(checkbox, 1)
-            # title_v_box.addStretch(10)
-        # for label in noises:
-        #     layout = QHBoxLayout()
-        #     checkbox = QCheckBox(label, self)
-        #     self.labels.append(checkbox)
-        #     self.chkbxs.append(checkbox)
-        #     layout.addWidget(checkbox)
-            
-            
-        #     #REMVOVE THIS LINE AFTER SLIDER FIXED
-        #     title_v_box.addLayout(layout)
-            
-
-        #     def updateLabel(label, value):
-        #         label.setText(str(value))
-
-            # if label in slider_one:
-            #     sld = QSlider(Qt.Orientation.Horizontal)
-            #     sld.setFixedWidth(100)
-            #     sld.setRange(0, 1)
-            #     sld.setTickPosition(QSlider.TickPosition.TicksAbove)
-
-            #     result_label = QLabel('')
-            #     sld.valueChanged.connect(lambda value: updateLabel(result_label, value))
-
-            #     liders[sld] = result_label  # add slider and label to the dictionary
-
-            #     layout.addWidget(sld)
-            #     layout.addWidget(result_label)
-
-            # if label in slider_two:
-            #     sld1 = QSlider(Qt.Orientation.Horizontal)
-            #     sld1.setFixedWidth(100)
-            #     sld1.setRange(0, 1)
-            #     sld1.setTickPosition(QSlider.TickPosition.TicksAbove)
-
-            #     result_label1 = QLabel('')
-            #     sld1.valueChanged.connect(lambda value: updateLabel(result_label1, value))
-
-            #     liders[sld1] = result_label1  # add slider and label to the dictionary
-
-            #     layout.addWidget(sld1)
-            #     layout.addWidget(result_label1)
-
-            #     sld2 = QSlider(Qt.Orientation.Horizontal)
-            #     sld2.setFixedWidth(100)
-            #     sld2.setRange(0, 1)
-            #     sld2.setTickPosition(QSlider.TickPosition.TicksAbove)
-
-            #     result_label2 = QLabel('')
-            #     sld2.valueChanged.connect(lambda value: updateLabel(result_label2, value))
-
-            #     liders[sld2] = result_label2  # add slider and label to the dictionary
-
-            #     layout.addWidget(sld2)
-            #     layout.addWidget(result_label2)
-
-            # if label in slider_no:
-            #     textbox1 = QLineEdit()
-            #     textbox2 = QLineEdit()
-            #     layout.addWidget(textbox1)
-            #     layout.addWidget(textbox2)
-
-        self.checkbox_functions = {}
-        self.checkbox_functions['Impulse'] = self.impulse
-        self.checkbox_functions['Anisotropic'] = self.anisotropic
-        self.checkbox_functions['Exponential'] = self.exponential
-        self.checkbox_functions['Flimgrain'] = self.flimgrain
-        self.checkbox_functions['Gamma'] = self.gamma
-        self.checkbox_functions['Gaussian'] = self.gaussian
-        self.checkbox_functions['Pepper'] = self.pepper
-        self.checkbox_functions['Periodic'] = self.periodic
-        self.checkbox_functions['Poisson'] = self.poisson
-        self.checkbox_functions['Rayleigh'] = self.rayleigh
-        self.checkbox_functions['Speckle'] = self.speckle
-        self.checkbox_functions['Uniform'] = self.uniform
-
+        # self.checkbox_functions = {}
+        # self.checkbox_functions['Impulse'] = self.impulse
+        # self.checkbox_functions['Anisotropic'] = self.anisotropic
+        # self.checkbox_functions['Exponential'] = self.exponential
+        # self.checkbox_functions['Flimgrain'] = self.flimgrain
+        # self.checkbox_functions['Gamma'] = self.gamma
+        # self.checkbox_functions['Gaussian'] = self.gaussian
+        # self.checkbox_functions['Pepper'] = self.pepper
+        # self.checkbox_functions['Periodic'] = self.periodic
+        # self.checkbox_functions['Poisson'] = self.poisson
+        # self.checkbox_functions['Rayleigh'] = self.rayleigh
+        # self.checkbox_functions['Speckle'] = self.speckle
+        # self.checkbox_functions['Uniform'] = self.uniform
 
         title_v_box.addLayout(title_h_box_a)     
         title_v_box.addLayout(title_h_box_b)
@@ -451,8 +301,6 @@ class Project(QWidget):
         self.main_container.setStretchFactor(title_v_box, 1)
         
         
-        
-        
         self.styles()
         self.setLayout(self.main_container)
         self.show()
@@ -463,126 +311,22 @@ class Project(QWidget):
         # hover working others not working
         global show_preview,flag_hover,show_name
         if m == "Hover over preview":
-            if b.isChecked() == True:
-                flag_hover=True
-            else:
-                flag_hover=False
+                flag_hover=b.isChecked()
         elif m=="Show preview name":
-            if b.isChecked() == True:
-                show_name=True
-            else:
-                show_name=False
+                show_name=b.isChecked()
         elif m=="Show preview":
-            if b.isChecked() == True:
-                show_preview=True
-            else:
-                show_preview=False
+            show_preview=b.isChecked()
         elif m=="Open Output folder when done":
-            if b.isChecked() == True:
-                open_folder_when_done=True
-            else:
-                open_folder_when_done=False
-                
-    def impulse(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(impulse(i))
-        for i in range(len(generatedimages)):
-            print('output/impulse'+str(i+1)+'.jpg')
-            cv2.imwrite('output/impulse'+str(i+1)+'.jpg',generatedimages[i])
+            open_folder_when_done=b.isChecked()
+            
     def refresh(self):
         global last_refreshed
         if time.time()-last_refreshed > 2:
             self.add_image_grid()
-            last_refreshed = time.time()
-    def anisotropic(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(anisotropic(i))
-        for i in range(len(generatedimages)):
-            print('output/anisotropic'+str(i+1)+'.jpg')
-            cv2.imwrite('output/anisotropic'+str(i+1)+'.jpg',generatedimages[i])
+            last_refreshed = time.time()    
 
-    def exponential(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(exponential(i))
-        for i in range(len(generatedimages)):
-            print('output/exponential'+str(i+1)+'.jpg')
-            cv2.imwrite('output/exponential'+str(i+1)+'.jpg',generatedimages[i])
+    
 
-    def flimgrain(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(flimgrain(i))
-        for i in range(len(generatedimages)):
-            print('output/flimgrain'+str(i+1)+'.jpg')
-            cv2.imwrite('output/flimgrain'+str(i+1)+'.jpg',generatedimages[i])
-
-    def gamma(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(gamma(i))
-        for i in range(len(generatedimages)):
-            print('output/gamma'+str(i+1)+'.jpg')
-            cv2.imwrite('output/gamma'+str(i+1)+'.jpg',generatedimages[i])
-
-    def gaussian(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(gaussian(i))
-        for i in range(len(generatedimages)):
-            print('output/gaussian'+str(i+1)+'.jpg')
-            cv2.imwrite('output/gaussian'+str(i+1)+'.jpg',generatedimages[i])
-
-    def pepper(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(pepper(i))
-        for i in range(len(generatedimages)):
-            print('output/pepper'+str(i+1)+'.jpg')
-            cv2.imwrite('output/pepper'+str(i+1)+'.jpg',generatedimages[i])
-
-    def periodic(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(periodic(i))
-        for i in range(len(generatedimages)):
-            print("output/periodic"+str(i+1)+'.jpg')
-            cv2.imwrite('output/periodic'+str(i+1)+'.jpg',generatedimages[i])
-
-    def poisson(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(poisson(i))
-        for i in range(len(generatedimages)):
-            print('output/poisson'+str(i+1)+'.jpg')
-            cv2.imwrite('output/poisson'+str(i+1)+'.jpg',generatedimages[i])
-
-    def rayleigh(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(add_rayleigh_noise(i))
-        for i in range(len(generatedimages)):
-            print('output/rayleigh'+str(i+1)+'.jpg')
-            cv2.imwrite('output/rayleigh'+str(i+1)+'.jpg',generatedimages[i])
-
-    def speckle(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(speckle(i))
-        for i in range(len(generatedimages)):
-            print('output/speckle'+str(i+1)+'.jpg')
-            cv2.imwrite('output/speckle'+str(i+1)+'.jpg',generatedimages[i])
-        return True
-
-    def uniform(self):
-        generatedimages = []
-        for i in self.addedimages:
-            generatedimages.append(uniform(i))
-        for i in range(len(generatedimages)):
-            print('output/uniform'+str(i+1)+'.jpg')
-            cv2.imwrite('output/uniform'+str(i+1)+'.jpg',generatedimages[i])
 
     def identify(self):
         self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")        
@@ -596,37 +340,68 @@ class Project(QWidget):
             else:
                 # for error close lol 
                 # need to remove this
+                
                 QMessageBox(self, "Title", "Message")
             return 
         
         
         import timeit
         start = timeit.default_timer()
+        print(start)
         # bar = QProgressBar(self)
-        
-        results = {}
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            for widget in self.chkbxs:
-                if isinstance(widget, QCheckBox) and widget.isChecked():
-                    label = widget.text()
-                    future=executor.submit(self.checkbox_functions[label])
-                    results[label] = future 
-                    print("Submitted future for checkbox:", label)
+        # noise_generator = NoiseGenerator(self.addedimages)
+        # results = {}
+        # with concurrent.futures.ProcessPoolExecutor() as executor:
+        #     for widget in self.chkbxs:
+        #         if isinstance(widget, QCheckBox) and widget.isChecked():
+        #             label = widget.text().lower()
+        #             function = getattr(self, label)
+        #             print(function, type(function),label)
+        #             future = executor.submit(function)
+                    
+        #             results[label] = future
+        #             print("Submitted future for checkbox:", label)
 
+        # concurrent.futures.wait(results.values())
+
+        results = {}
+
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+                for widget in self.chkbxs:
+                        if isinstance(widget, QCheckBox) and widget.isChecked():
+                            label = widget.text().lower()
+                            # print(noise)
+                            filter_func_name = label
+                            generated_images = []
+                            # print(filter_func_name, label)
+                            for image in self.addedimages:
+                                # print(image,'ds')
+                                generated_images.append(globals()[filter_func_name](image))
+                            # print(generated_images,'dsd')
+                            for i, generated_image in enumerate(generated_images):
+                                output_filename = f'output/{label}{i+1}.jpg'
+                                # print(output_filename)
+                                cv2.imwrite(output_filename, generated_image)
+                    
         concurrent.futures.wait(results.values())
-        
+
+        # print('Running')
         for label, future in results.items():
-            if future.done():
-                time_taken = timeit.timeit(lambda: future.result(), number=1)
-                print(f"Time taken for '{label}': {time_taken:.6f} seconds")
-                result = future.result()
+                                print(label, future)
+                                if future.done():
+                                    time_taken = timeit.timeit(lambda: future.result(), number=1)
+                                    print(f"Time taken for '{label}': {time_taken:.6f} seconds")
+                                    result = future.result()
+
+        
         stop= timeit.default_timer()
         print('Completed in ',stop-start,'seconds')
         if open_folder_when_done:
             to_open = os.path.abspath(folder_dir)
             subprocess.Popen(r'explorer ' + to_open)
-        self.gird_generated.update()
-        self.gird_generated.activate()
+        self.refresh()
+        # self.gird_generated.update()
+        # self.gird_generated.activate()
         # self.add_image_grid()
             
     def on_stateChanged(self, state):
@@ -676,7 +451,6 @@ class Project(QWidget):
                     child.widget().deleteLater()
                     
             try:
-                # splitter = QSplitter(Qt.Horizontal, self)
                 i=0
                 c=0
                 max_r=3
@@ -713,7 +487,6 @@ class Project(QWidget):
                         if i==max_r:
                             r+=1
                             i=0
-                    # self.gird_generated.setMinimumWidth(500)
 
                     self.gird_generated.update()
                     self.gird_generated.activate()
@@ -770,8 +543,6 @@ class Project(QWidget):
         self.photoViewer.setPixmap(pixmap)
         
     def openImage(self, file_dir): 
-        # self.gird_generated.update()
-        # self.gird_generated.activate()
         print(file_dir) 
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
