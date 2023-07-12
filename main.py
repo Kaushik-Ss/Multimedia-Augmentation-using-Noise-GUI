@@ -122,16 +122,10 @@ class Project(QWidget):
         self.buttons=[]
         # self.move(0,0)
         self.setWindowState(QtCore.Qt.WindowMaximized)
-                
-        
-        
-        
+                        
         slider_one={'Gaussian','Gamma','Flimgrain','Pepper','Poisson','Speckle','Uniform'}
         slider_two={'Anisotropic','Periodic'}
         slider_no={'Impulse','Rayleigh'}
-
-
-        
 
         
         #         anisotropic mean stddev
@@ -148,7 +142,6 @@ class Project(QWidget):
         # speckle noise_level (idk 0-1)
         # uniform intensity (idk 0-1)
         
-
         self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
         # self.photoViewer.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -206,18 +199,10 @@ class Project(QWidget):
         # self.b3.stateChanged.connect(lambda:self.settings(self.b3))
         self.b4 = QCheckBox("Open Output folder when done")
         self.b4.stateChanged.connect(lambda:self.settings(self.b4))
-        
-        
-        
-        
         show_preview=True
-
 
         self.buttons.append(button_iden)
         self.buttons.append(button_inv)
-        
-        
-        
         
         title_h_box_a = QHBoxLayout()
         title_h_box_a.addWidget(button_gen)
@@ -231,12 +216,9 @@ class Project(QWidget):
         title_h_box_c.addWidget(self.b2)
         # title_h_box_c.addWidget(self.b3)
         title_h_box_c.addWidget(self.b4)
-        
-        
         # title_h_box_b.addStretch(10)
         # title_h_box.setSpacing(20)
         
-    
         title_v_box = QVBoxLayout()   
         title_v_box.setAlignment(Qt.AlignCenter) 
         title_text_lable=QHBoxLayout()    
@@ -255,10 +237,6 @@ class Project(QWidget):
         title_v_box.addLayout(title_text_lable)
         title_v_box.addStretch(10)
         
-        
-        
-
-
         for label in noises:
             layout = QHBoxLayout()
             checkbox = QCheckBox(label, self)
@@ -274,20 +252,6 @@ class Project(QWidget):
                     print(liders)
                     print(liders[label])        
                     liders[label].setText(str(value))
-
-        # self.checkbox_functions = {}
-        # self.checkbox_functions['Impulse'] = self.impulse
-        # self.checkbox_functions['Anisotropic'] = self.anisotropic
-        # self.checkbox_functions['Exponential'] = self.exponential
-        # self.checkbox_functions['Flimgrain'] = self.flimgrain
-        # self.checkbox_functions['Gamma'] = self.gamma
-        # self.checkbox_functions['Gaussian'] = self.gaussian
-        # self.checkbox_functions['Pepper'] = self.pepper
-        # self.checkbox_functions['Periodic'] = self.periodic
-        # self.checkbox_functions['Poisson'] = self.poisson
-        # self.checkbox_functions['Rayleigh'] = self.rayleigh
-        # self.checkbox_functions['Speckle'] = self.speckle
-        # self.checkbox_functions['Uniform'] = self.uniform
 
         title_v_box.addLayout(title_h_box_a)     
         title_v_box.addLayout(title_h_box_b)
@@ -348,21 +312,6 @@ class Project(QWidget):
         import timeit
         start = timeit.default_timer()
         print(start)
-        # bar = QProgressBar(self)
-        # noise_generator = NoiseGenerator(self.addedimages)
-        # results = {}
-        # with concurrent.futures.ProcessPoolExecutor() as executor:
-        #     for widget in self.chkbxs:
-        #         if isinstance(widget, QCheckBox) and widget.isChecked():
-        #             label = widget.text().lower()
-        #             function = getattr(self, label)
-        #             print(function, type(function),label)
-        #             future = executor.submit(function)
-                    
-        #             results[label] = future
-        #             print("Submitted future for checkbox:", label)
-
-        # concurrent.futures.wait(results.values())
 
         results = {}
 
