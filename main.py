@@ -1,7 +1,7 @@
 import os
 import sys
 import subprocess
-
+from PIL import Image
 import multiprocessing
 import concurrent.futures
 from noises.impulse import *
@@ -16,6 +16,19 @@ from noises.poisson import *
 from noises.rayleigh import *
 from noises.speckle import *
 from noises.uniform import *
+from video.vimpulse import *
+from video.vanisotropic import *
+from video.vexponential import *
+from video.vflimgrain import *
+from video.vgamma import *
+from video.vgaussian import *
+from video.vpepper import *
+from video.vperiodic import *
+from video.vpoisson import *
+from video.vrayleigh import *
+from video.vspeckle import *
+from video.vuniform import *
+
 # from noises.identify_noise import *
 
 # from noises.
@@ -322,10 +335,17 @@ class Project(QWidget):
                             # print(noise)
                             filter_func_name = label
                             generated_images = []
+                            generated_videos = []
                             # print(filter_func_name, label)
+                            i = 0
                             for image in self.addedimages:
+                                # form = Image.open(image).format
+                                if(image.endswith(".png") or image.endswith(".jpg") or image.endswith(".jpeg")):
                                 # print(image,'ds')
-                                generated_images.append(globals()[filter_func_name](image))
+                                    generated_images.append(globals()[filter_func_name](image))
+                                else:
+                                    globals()['v'+filter_func_name](image,i+1)
+                            i = 0
                             # print(generated_images,'dsd')
                             for i, generated_image in enumerate(generated_images):
                                 output_filename = f'output/{label}{i+1}.jpg'
