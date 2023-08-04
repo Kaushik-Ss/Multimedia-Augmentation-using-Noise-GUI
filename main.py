@@ -741,7 +741,7 @@ class Project(QWidget):
                 c=0
                 max_r=3
                 r=0
-                for image in os.listdir(folder_dir):
+                for image in os.listdir(folder_dir)[::-1]:
                     if (image.endswith(".jpg")):
                         small_grid=QGridLayout()
                         self.name_image=os.path.join(folder_dir,image)
@@ -793,6 +793,7 @@ class Project(QWidget):
                 if widget is not None:
                     widget.setParent(None)
                 else:
+                    
                     self.deleteItemsOfLayout(item.layout())
 
     def add_image(self):

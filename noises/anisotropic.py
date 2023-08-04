@@ -30,9 +30,13 @@ import cv2
 import time
 
 def anisotropic(imagelocation):
-    img = cv2.imread(imagelocation, 0)
+    img = cv2.imread(imagelocation)
     mean = 0
     stddev = 50
+    # Generate noise for each color channel separately
     noise = np.random.normal(mean, stddev, img.shape)
+    # Add noise to each channel
     noisy_img = img + noise.astype(np.uint8)
+    # Clip the pixel values to valid range (0 to 255)
+    noisy_img = np.clip(noisy_img, 0, 255)
     return noisy_img
