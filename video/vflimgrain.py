@@ -36,7 +36,7 @@ def vflimgrain(image,i):
             break
 
         # Add film grain noise to the frame
-        noisy_frame = add_film_grain_noise(frame, strength=10)
+        noisy_frame = add_film_grain_noise(frame, strength=1)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

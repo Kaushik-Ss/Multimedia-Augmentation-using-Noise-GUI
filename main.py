@@ -52,16 +52,65 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import sys
-
+from PIL import Image
+from collections import Counter
 
 flag_hover=False
 show_name=False
-folder_dir='output/'
+folder_dir='/output'
 open_folder_when_done=False
 show_preview=True
 last_refreshed=0
 width=256
 height=512
+get_current_label={}
+sepearator='-'
+
+
+
+def count_files():
+    lis=[]
+    for image in os.listdir(os.getcwd()+folder_dir):
+        image=str(image)
+        k=image[:image.rfind(sepearator)]
+        lis.append(k)
+    print(lis)
+    get_current_label=Counter(lis)
+
+
+count_files()
+
+def save_image_generated(generated_image,label):
+    get_current_label[label]=get_current_label.get(label,0)+1
+    
+    output_filename = f'output/{label}{sepearator}{get_current_label[label]}.jpg'
+    print(output_filename,'created')
+    cv2.imwrite(output_filename, generated_image)
+
+def create_thumbnail(input_file,output_filename):
+  
+      # options = {
+      #   'trim': False,
+      #   'height': height,
+      #   'width': width,
+      #   'type': 'thumbnail'
+      #   }
+      # print(input_file,'createing thumbnail at',output_filename)
+      # thumbnail.generate_thumbnail(input_file,output_filename,options)
+    if not os.path.exists(output_filename):
+        image = Image.open(input_file)
+        MAX_SIZE = (height, width)
+          
+        image.thumbnail(MAX_SIZE)
+          
+        # creating thumbnail
+        image.save(output_filename)
+    # image.show()
+
+
+    # print(output_filename,'thumbnail')
+
+
 class HoverLabel(QLabel):
     def __init__(self, parent=None):
         QLabel.__init__(self, parent)
@@ -346,12 +395,10 @@ class Project(QWidget):
                                 else:
                                     globals()['v'+filter_func_name](image,i+1)
                             i = 0
-                            # print(generated_images,'dsd')
                             for i, generated_image in enumerate(generated_images):
-                                output_filename = f'output/{label}{i+1}.jpg'
-                                # print(output_filename)
-                                cv2.imwrite(output_filename, generated_image)
-                    
+                                save_image_generated(generated_image,label)
+                                
+                                
         concurrent.futures.wait(results.values())
 
         # print('Running')
@@ -413,6 +460,8 @@ class Project(QWidget):
             isExist = os.path.exists(folder_dir)
             if not isExist:
                 os.makedirs(folder_dir)
+
+            
                 
             while self.gird_generated.count():
                 child = self.gird_generated.takeAt(0)
@@ -424,42 +473,65 @@ class Project(QWidget):
                 c=0
                 max_r=3
                 r=0
-                for image in os.listdir(folder_dir):
-                    if (image.endswith(".jpg")):
-                        small_grid=QGridLayout()
-                        self.name_image=os.path.join(folder_dir,image)
-                        self.text_def=QLabel(self)
-                        self.word_image=HoverLabel()
-                        self.labels.append(self.word_image)
-                        pixmap=QPixmap(self.name_image)
-                        pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
-                        self.text_def.setText(image)
-                        self.text_def.setFixedHeight(40)
-                        self.text_def.setStyleSheet(
-                            'background-color:#6096B4;'
-                            'font-size: 10pt; font-weight: italic;')
-                        self.word_image.setPixmap(pixmap)
-                        
-                        def create_image_handler(image_name):
-                            def handler(event):
-                                self.openImage(image_name)
-                            return handler
-        
-                        self.word_image.mousePressEvent = create_image_handler(self.name_image)
-                        
-                        small_grid.addWidget(self.word_image,0,0)
-                        if show_name:
-                            small_grid.addWidget(self.text_def,1,0)
-                        self.gird_generated.addLayout(small_grid,r,i)
-                        
-                        i=i+1
-                        if i==max_r:
-                            r+=1
-                            i=0
+                print(os.getcwd()+folder_dir)
 
-                    self.gird_generated.update()
-                    self.gird_generated.activate()
-                
+                for image in os.listdir(os.getcwd()+folder_dir):
+                    output_loc=os.getcwd()+'/'+f'output/thumbnail_new/{image}'
+                    if not os.path.exists(output_loc):
+                        # print(os.getcwd()+"/"+image,'--')  
+                        # print('dsddss')   
+                        thumb_dir=os.getcwd()+folder_dir+'thumbnail_new'
+                        isExist = os.path.exists(thumb_dir)
+                        if not isExist:
+                                        os.makedirs(thumb_dir)
+                        # print(image,os.getcwd(),'pls')         
+                        label_name=os.getcwd()+folder_dir+"/"+str(image)
+                        
+                        try:
+                            
+                                create_thumbnail(label_name,output_loc)
+                        except Exception as e:
+                            print(e,'Unable to add thumbnail for',image)
+                print(os.getcwd())
+                for image in os.listdir(os.getcwd()+"/output/thumbnail_new/"):
+                        if os.path.exists(os.getcwd()+"/output/"+image):
+                            small_grid=QGridLayout()
+                            self.name_image=os.path.join(os.getcwd()+"/output/thumbnail_new/",image)
+                            self.text_def=QLabel(self)
+                            self.word_image=HoverLabel()
+                            self.labels.append(self.word_image)
+                            pixmap=QPixmap(self.name_image)
+                            # pixmap=pixmap.scaled(256, 512, Qt.KeepAspectRatio, Qt.FastTransformation)
+                            self.text_def.setText(image)
+                            self.text_def.setFixedHeight(40)
+                            self.text_def.setStyleSheet(
+                                'background-color:#6096B4;'
+                                'font-size: 10pt; font-weight: italic;')
+                            self.word_image.setPixmap(pixmap)
+                            
+                            def create_image_handler(image_name):
+                                def handler(event):
+                                    self.openImage(os.getcwd()+'/output/'+image_name)
+                                return handler
+            
+                            # self.word_image.mousePressEvent = create_image_handler(image)
+
+                            self.word_image.mousePressEvent = create_image_handler(image)
+                            
+                            small_grid.addWidget(self.word_image,0,0)
+                            if show_name:
+                                small_grid.addWidget(self.text_def,1,0)
+                            self.gird_generated.addLayout(small_grid,r,i)
+                            
+                            i=i+1
+                            if i==max_r:
+                                r+=1
+                                i=0
+
+                            self.gird_generated.update()
+                            self.gird_generated.activate()
+                        self.gird_generated.update()
+                        self.gird_generated.activate()
                 self.gird_generated.update()
                 self.gird_generated.activate()
             except Exception as e:
@@ -478,9 +550,12 @@ class Project(QWidget):
                     self.deleteItemsOfLayout(item.layout())
 
     def add_image(self):
-        self.file_name,_ = QFileDialog.getOpenFileName(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
-        print(self.file_name)
-        self.addedimages.append(self.file_name)
+        self.file_names,_ = QFileDialog.getOpenFileNames(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
+        print(self.file_names)
+        if len(self.file_names)==0:
+            self.addedimages.append(self.file_names)
+        else:
+            self.addedimages+=self.file_names
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasImage:

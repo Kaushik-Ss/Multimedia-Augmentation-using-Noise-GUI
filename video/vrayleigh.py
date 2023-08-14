@@ -8,7 +8,7 @@ def vrayleigh(image,i):
         noise = np.random.rayleigh(scale, size=image.shape)
 
         # Add noise to the image
-        noisy_image = np.clip(image + noise, 0, 255).astype(np.uint8)
+        noisy_image = np.clip(image + noise, 0, 30).astype(np.uint8)
 
         return noisy_image
 

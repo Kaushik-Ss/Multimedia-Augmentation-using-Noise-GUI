@@ -34,7 +34,7 @@ def vgamma(image,i):
             break
 
         # Add gamma noise to the frame
-        noisy_frame = add_gamma_noise(frame, strength=10, gamma=2.0)
+        noisy_frame = add_gamma_noise(frame, strength=0.1, gamma=2.0)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

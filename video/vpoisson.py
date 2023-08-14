@@ -7,7 +7,7 @@ def vpoisson(image,i):
         noisy_image = np.random.poisson(image)
 
         # Clip the pixel values to the valid range
-        noisy_image = np.clip(noisy_image, 0, 255).astype(np.uint8)
+        noisy_image = np.clip(noisy_image, 0, 30).astype(np.uint8)
 
         return noisy_image
 

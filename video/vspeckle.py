@@ -8,7 +8,7 @@ def vspeckle(image,i):
         noise = scale * np.random.randn(*image.shape)
 
         # Add noise to the image
-        noisy_image = np.clip(image + image * noise, 0, 255).astype(np.uint8)
+        noisy_image = np.clip(image + image * noise, 0, 30).astype(np.uint8)
 
         return noisy_image
 

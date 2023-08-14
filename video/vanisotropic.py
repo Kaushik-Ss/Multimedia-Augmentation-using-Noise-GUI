@@ -12,7 +12,7 @@ def vanisotropic(image,i):
         
         # Add noise to the image
         noisy_image = image.astype(np.float64) + noise[:, :, np.newaxis]
-        noisy_image = np.clip(noisy_image, 0, 255).astype(np.uint8)
+        noisy_image = np.clip(noisy_image, 0, 30).astype(np.uint8)
         
         return noisy_image
 
@@ -39,7 +39,7 @@ def vanisotropic(image,i):
             break
 
         # Add anisotropic noise to the frame
-        noisy_frame = add_anisotropic_noise(frame, strength=0.1)
+        noisy_frame = add_anisotropic_noise(frame, strength=0.0001)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

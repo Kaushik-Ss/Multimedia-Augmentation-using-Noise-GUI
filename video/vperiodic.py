@@ -41,7 +41,7 @@ def vperiodic(image,i):
             break
 
         # Add periodic noise to the frame
-        noisy_frame = add_periodic_noise(frame, frequency=10, strength=50)
+        noisy_frame = add_periodic_noise(frame, frequency=15, strength=30)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

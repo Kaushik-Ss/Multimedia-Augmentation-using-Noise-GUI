@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 def vpepper(image,i):
-    def add_pepper_noise(image, probability=0.01):
+    def add_pepper_noise(image, probability=0.001):
         # Copy the image to avoid modifying the original
         noisy_image = np.copy(image)
 
@@ -41,7 +41,7 @@ def vpepper(image,i):
             break
 
         # Add pepper noise to the frame
-        noisy_frame = add_pepper_noise(frame, probability=0.01)
+        noisy_frame = add_pepper_noise(frame, probability=0.001)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

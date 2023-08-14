@@ -37,7 +37,7 @@ def vexponential(image,i):
             break
 
         # Add exponential noise to the frame
-        noisy_frame = add_exponential_noise(frame, strength=0.1)
+        noisy_frame = add_exponential_noise(frame, strength=0.01)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)
