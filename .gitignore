@@ -10,6 +10,17 @@ output
 ..output/
 .output/
 /output/
+
+test_data/
+test_data/test_data/test_data/test_data
+test_data/
+test_data  
+/.test_data/
+..test_data/
+.test_data/
+/test_data/
+
+
 # C extensions
 *.so
 
