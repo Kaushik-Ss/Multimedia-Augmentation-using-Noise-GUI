@@ -1,13 +1,13 @@
 import cv2
 import numpy as np
 
-def vpoisson(image,i):
+def vpoisson(image,i,value):
     def add_poisson_noise(image):
         # Generate Poisson noise
         noisy_image = np.random.poisson(image)
 
         # Clip the pixel values to the valid range
-        noisy_image = np.clip(noisy_image, 0, 30).astype(np.uint8)
+        noisy_image = np.clip(noisy_image, 0, value*100).astype(np.uint8)
 
         return noisy_image
 

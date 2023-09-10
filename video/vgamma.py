@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vgamma(image,i):
+def vgamma(image,i,value):
     def add_gamma_noise(image, strength=0.1, gamma=2.0):
         # Generate gamma noise
         noise = np.random.gamma(shape=gamma, scale=strength, size=image.shape).astype(np.uint8)
@@ -34,7 +34,7 @@ def vgamma(image,i):
             break
 
         # Add gamma noise to the frame
-        noisy_frame = add_gamma_noise(frame, strength=0.1, gamma=2.0)
+        noisy_frame = add_gamma_noise(frame, strength=value, gamma=2.0)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

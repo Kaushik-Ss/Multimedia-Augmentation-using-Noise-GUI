@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def vgaussian(image,i):
+def vgaussian(image,i,value):
     def add_gaussian_noise(image, strength=0.1):
         # Generate Gaussian noise
         noise = np.random.normal(loc=0, scale=strength, size=image.shape).astype(np.uint8)
@@ -35,7 +35,7 @@ def vgaussian(image,i):
             break
 
         # Add Gaussian noise to the frame
-        noisy_frame = add_gaussian_noise(frame, strength=0.1)
+        noisy_frame = add_gaussian_noise(frame, strength=value)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

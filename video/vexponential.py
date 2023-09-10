@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vexponential(image,i):
+def vexponential(image,i,value):
 
     def add_exponential_noise(image, strength=0.1):
         # Generate exponential noise
@@ -37,7 +37,7 @@ def vexponential(image,i):
             break
 
         # Add exponential noise to the frame
-        noisy_frame = add_exponential_noise(frame, strength=0.01)
+        noisy_frame = add_exponential_noise(frame, strength=value)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

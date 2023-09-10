@@ -33,24 +33,33 @@ from video.vuniform import *
 
 # from noises.
 
-from PyQt5.QtCore import Qt,QUrl,QObject, QRunnable, QThreadPool
-from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
-from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
-from PyQt5 import QtCore,QtWidgets
-from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QWidget, QGridLayout, QPushButton
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout, QSplitter, QVBoxLayout
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QSizePolicy
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtCore import Qt
+# from PyQt5.QtCore import Qt,QUrl,QObject, QRunnable, QThreadPool
+# from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QPushButton,QCheckBox,QFileDialog,QVBoxLayout,QFormLayout,QHBoxLayout,QGridLayout,QLineEdit
+# from PyQt5.QtGui import QPixmap,QFont,QFontDatabase,QDesktopServices
+# from PyQt5 import QtCore,QtWidgets
+# from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QWidget, QGridLayout, QPushButton
+# from PyQt5.QtGui import QPixmap
+# from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout, QSplitter, QVBoxLayout
+# from PyQt5.QtGui import QPixmap
+# from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QSizePolicy
+# from PyQt5.QtGui import QPixmap
+# from PyQt5.QtCore import Qt, QPoint
+# from PyQt5.QtCore import Qt
+
+from PyQt5.QtWidgets import *
+from PyQt5 import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
 
 # importing libraries
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+
 import sys
 from PIL import Image
 from collections import Counter
@@ -69,6 +78,10 @@ sepearator='-'
 
 
 def count_files():
+    try:
+        os.mkdir(os.getcwd()+"/output/thumbnail_new/")
+    except:
+        pass
     lis=[]
     for image in os.listdir(os.getcwd()+folder_dir):
         image=str(image)
@@ -77,32 +90,51 @@ def count_files():
     # print(lis) to print the already generated files
     get_current_label=Counter(lis)
 
-
 count_files()
 
 def save_image_generated(generated_image,label):
     get_current_label[label]=get_current_label.get(label,0)+1
-    
     output_filename = f'output/{label}{sepearator}{get_current_label[label]}.jpg'
     print(output_filename,'created')
     cv2.imwrite(output_filename, generated_image)
+    
+
+
+def get_first_frame(video_path, output_path):
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        print("Error: Could not open video file.")
+        return
+    ret, frame = cap.read()
+    if ret:
+        cv2.imwrite(output_path, frame)
+        cap.release()
+        return
+        print(f"First frame saved as {output_path}")
+    else:
+        print("Error: Could not read the first frame")
+    cap.release()
+
+
 
 def create_thumbnail(input_file,output_filename):
     if not os.path.exists(output_filename):
-        image = Image.open(input_file)
-        MAX_SIZE = (height, width)
-        image.thumbnail(MAX_SIZE)
-        image.save(output_filename)
-
-class cslider(QSlider):
-    def __init__(self,minimum,maximum,default,interval):
-        self.sl = QSlider(Qt.Horizontal)
-        self.sl.setMinimum(minimum)
-        self.sl.setMaximum(maximum)
-        self.sl.setValue(default)
-        self.sl.setTickPosition(QSlider.TicksBelow)
-        self.sl.setTickInterval(interval)
-        return self.sl
+        if isimage(input_file):
+            image = Image.open(input_file)
+            MAX_SIZE = (height, width)
+            image.thumbnail(MAX_SIZE)
+            image.save(output_filename)
+        elif isvideo(input_file):
+            m=output_filename.find('.mp4')
+            output_filename=output_filename[:m]+'__vid__.jpg'
+            # create_thumbnail(input_file,output_filename)
+            get_first_frame(input_file,output_filename)
+            
+        
+def isimage(image):
+    return (image.endswith(".png") or image.endswith(".jpg") or image.endswith(".jpeg"))
+def isvideo(video):
+    return video.endswith(".mp4") 
 
 
 class HoverLabel(QLabel):
@@ -186,11 +218,15 @@ class Project(QWidget):
         slider_no={'Impulse','Rayleigh'}
 
         self.main_container=QHBoxLayout()
+
         self.photoViewer = ImageLabel()
         # self.photoViewer.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         self.photoViewer.setMinimumWidth(300);
         self.labels.append(self.photoViewer)
         self.main_container.addWidget(self.photoViewer)        
+        
+        
+        
         
         
         self.scrollArea = QtWidgets.QScrollArea()
@@ -417,13 +453,15 @@ class Project(QWidget):
                             # print(filter_func_name, label)
                             i = 0
                             for image in self.addedimages:
-                                # form = Image.open(image).format
-                                if(image.endswith(".png") or image.endswith(".jpg") or image.endswith(".jpeg")):
-                                # print(image,'ds')
-                                    print(value_im)
-                                    generated_images.append(globals()[filter_func_name](image,value_im))
-                                else:
-                                    globals()['v'+filter_func_name](image,i+1)
+                                if len(image)>0:
+                                    print(image,self.addedimages,'--')
+                                    # form = Image.open(image).format
+                                    if isimage(image):
+                                    # print(image,'ds')
+                                        print(value_im)
+                                        generated_images.append(globals()[filter_func_name](image,value_im))
+                                    else:
+                                        globals()['v'+filter_func_name](image,i+1,value_im)
                             i = 0
                             for i, generated_image in enumerate(generated_images):
                                 save_image_generated(generated_image,label)
@@ -517,16 +555,26 @@ class Project(QWidget):
                         # print(image,os.getcwd(),'pls')         
                         label_name=os.getcwd()+folder_dir+"/"+str(image)
                         
-                        try:
-                            
+                        try:     
                                 create_thumbnail(label_name,output_loc)
                         except Exception as e:
                             print(e,'Unable to add thumbnail for',image)
                 print(os.getcwd())
                 for image in os.listdir(os.getcwd()+"/output/thumbnail_new/"):
-                        if os.path.exists(os.getcwd()+"/output/"+image):
+                        k=''
+                        if image.find('__vid__')>0:
+                            k=image.replace('__vid__',"")
+                            k=k.replace('.jpg',".mp4")
+                            
+                        
+                        if os.path.exists(os.getcwd()+"/output/"+image) or k:
                             small_grid=QGridLayout()
                             self.name_image=os.path.join(os.getcwd()+"/output/thumbnail_new/",image)
+                            print(image)
+                            if image.find('__vid__')>0:
+                                k=image.replace('__vid__',"")
+                                image=k.replace('.jpg',".mp4")
+                            
                             self.text_def=QLabel(self)
                             self.word_image=HoverLabel()
                             self.labels.append(self.word_image)

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vspeckle(image,i):
+def vspeckle(image,i,value):
 
     def add_speckle_noise(image, scale=0.1):
         # Generate speckle noise
@@ -35,7 +35,7 @@ def vspeckle(image,i):
             break
 
         # Add speckle noise to the frame
-        noisy_frame = add_speckle_noise(frame, scale=0.1)
+        noisy_frame = add_speckle_noise(frame, scale=value)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

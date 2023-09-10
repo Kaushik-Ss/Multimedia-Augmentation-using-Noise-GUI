@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vuniform(image,i):
+def vuniform(image,i,value):
 
     def add_uniform_noise(image, low=0, high=50):
         # Generate uniform noise
@@ -35,7 +35,7 @@ def vuniform(image,i):
             break
 
         # Add uniform noise to the frame
-        noisy_frame = add_uniform_noise(frame, low=0, high=50)
+        noisy_frame = add_uniform_noise(frame, low=0, high=value*100)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vimpulse(image,i):
+def vimpulse(image,i,value):
         
     def add_impulse_noise(image, probability=0.01, salt_vs_pepper=0.5):
         # Copy the image to avoid modifying the original
@@ -47,7 +47,7 @@ def vimpulse(image,i):
             break
 
         # Add impulse noise to the frame
-        noisy_frame = add_impulse_noise(frame, probability=0.01, salt_vs_pepper=0.5)
+        noisy_frame = add_impulse_noise(frame, probability=value, salt_vs_pepper=0.5)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

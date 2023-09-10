@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vflimgrain(image,i):
+def vflimgrain(image,i,value):
 
 
     def add_film_grain_noise(image, strength=0.1):
@@ -36,7 +36,7 @@ def vflimgrain(image,i):
             break
 
         # Add film grain noise to the frame
-        noisy_frame = add_film_grain_noise(frame, strength=1)
+        noisy_frame = add_film_grain_noise(frame, strength=value)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

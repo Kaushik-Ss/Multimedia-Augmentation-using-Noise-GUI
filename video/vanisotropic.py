@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from skimage.filters import frangi
 
-def vanisotropic(image,i):
+def vanisotropic(image,i,value):
     def add_anisotropic_noise(image, strength=0.1):
         # Generate anisotropic noise using the Frangi filter
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -39,7 +39,7 @@ def vanisotropic(image,i):
             break
 
         # Add anisotropic noise to the frame
-        noisy_frame = add_anisotropic_noise(frame, strength=0.0001)
+        noisy_frame = add_anisotropic_noise(frame, value)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)

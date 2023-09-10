@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def vrayleigh(image,i):
+def vrayleigh(image,i,value):
 
     def add_rayleigh_noise(image, scale=50):
         # Generate Rayleigh noise
@@ -35,7 +35,7 @@ def vrayleigh(image,i):
             break
 
         # Add Rayleigh noise to the frame
-        noisy_frame = add_rayleigh_noise(frame, scale=50)
+        noisy_frame = add_rayleigh_noise(frame, scale=value*100)
 
         # Write the noisy frame to the output video
         out.write(noisy_frame)
