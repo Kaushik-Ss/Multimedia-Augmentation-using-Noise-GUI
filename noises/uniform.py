@@ -15,9 +15,9 @@ import cv2
 import time
 from skimage.util import random_noise
 
-def uniform(imagelocation):
+def uniform(imagelocation,value):
     img = cv2.imread(imagelocation, 0)
-    intensity = 0.1
+    intensity = value
     noise = np.random.uniform(-intensity, intensity, img.shape)
     noisy_img = img + noise.astype(np.uint8)
     # cv2.imwrite('noisy_image_cv2.jpg', noisy_img)

@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from skimage.util import random_noise
 
-def pepper(imagelocation):
-    amountrange = 0.3
+def pepper(imagelocation,value):
+    amountrange = value
     img = cv2.imread(imagelocation)
     noise_img = random_noise(img, mode='pepper',amount=amountrange)
     noise_img = np.array(255*noise_img, dtype = 'uint8')

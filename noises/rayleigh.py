@@ -10,8 +10,8 @@
 import cv2
 import numpy as np
 
-def rayleigh(img):
-    scale = 50
+def rayleigh(img,value):
+    scale = value*100
     image = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
     noise = np.random.rayleigh(scale, size=image.shape).astype(np.float32)
     noisy_image = image + noise

@@ -29,10 +29,10 @@ import numpy as np
 import cv2
 import time
 
-def anisotropic(imagelocation):
+def anisotropic(imagelocation,value):
     img = cv2.imread(imagelocation)
     mean = 0
-    stddev = 50
+    stddev = value*100
     # Generate noise for each color channel separately
     noise = np.random.normal(mean, stddev, img.shape)
     # Add noise to each channel

@@ -1,9 +1,9 @@
 import cv2
 import numpy as np
 
-def periodic(imagelocation):
+def periodic(imagelocation,value):
     img = cv2.imread(imagelocation, 0)
-    noise_level = 0.1
+    noise_level = value
     noise_freq = 0.05
     h, w = img.shape
     y, x = np.ogrid[0:h, 0:w]

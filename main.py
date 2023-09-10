@@ -74,7 +74,7 @@ def count_files():
         image=str(image)
         k=image[:image.rfind(sepearator)]
         lis.append(k)
-    print(lis)
+    # print(lis) to print the already generated files
     get_current_label=Counter(lis)
 
 
@@ -88,27 +88,21 @@ def save_image_generated(generated_image,label):
     cv2.imwrite(output_filename, generated_image)
 
 def create_thumbnail(input_file,output_filename):
-  
-      # options = {
-      #   'trim': False,
-      #   'height': height,
-      #   'width': width,
-      #   'type': 'thumbnail'
-      #   }
-      # print(input_file,'createing thumbnail at',output_filename)
-      # thumbnail.generate_thumbnail(input_file,output_filename,options)
     if not os.path.exists(output_filename):
         image = Image.open(input_file)
         MAX_SIZE = (height, width)
-          
         image.thumbnail(MAX_SIZE)
-          
-        # creating thumbnail
         image.save(output_filename)
-    # image.show()
 
-
-    # print(output_filename,'thumbnail')
+class cslider(QSlider):
+    def __init__(self,minimum,maximum,default,interval):
+        self.sl = QSlider(Qt.Horizontal)
+        self.sl.setMinimum(minimum)
+        self.sl.setMaximum(maximum)
+        self.sl.setValue(default)
+        self.sl.setTickPosition(QSlider.TicksBelow)
+        self.sl.setTickInterval(interval)
+        return self.sl
 
 
 class HoverLabel(QLabel):
@@ -182,6 +176,8 @@ class Project(QWidget):
         self.chkbxs=[]
         self.labels=[]
         self.buttons=[]
+        self.d_label={}
+        self.d_lab={}
         # self.move(0,0)
         self.setWindowState(QtCore.Qt.WindowMaximized)
                         
@@ -189,21 +185,6 @@ class Project(QWidget):
         slider_two={'Anisotropic','Periodic'}
         slider_no={'Impulse','Rayleigh'}
 
-        
-        #         anisotropic mean stddev
-        #   gaussian   peak (0-1)
-        # gamma   peak (0-1)
-        
-        # flimgrain flimgrain (idk 0-1)
-        
-        # impulse b/w why?? number_of_pixels = random.randint(300, 10000) why??
-        # pepper amountrange (idk 0-1)
-        # periodic noise_level noise_freq (idk 0-1)
-        # poisson (idk 0-1)
-        # add_rayleigh_noise why ?? function name?? scale=(0,100)
-        # speckle noise_level (idk 0-1)
-        # uniform intensity (idk 0-1)
-        
         self.main_container=QHBoxLayout()
         self.photoViewer = ImageLabel()
         # self.photoViewer.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -299,14 +280,59 @@ class Project(QWidget):
         title_v_box.addLayout(title_text_lable)
         title_v_box.addStretch(10)
         
+        
+        #         anisotropic mean stddev
+        #   gaussian   peak (0-1)
+        # gamma   peak (0-1)
+        
+        # flimgrain flimgrain (idk 0-1)
+
+        # impulse b/w why?? number_of_pixels = random.randint(300, 10000) why??
+        # pepper amountrange (idk 0-1)
+        # periodic noise_level noise_freq (idk 0-1)
+        # poisson (idk 0-1)
+        # add_rayleigh_noise why ?? function name?? scale=(0,100)
+        # speckle noise_level (idk 0-1)
+        # uniform intensity (idk 0-1)
+        
+        def valuechange(self,size, clabel):
+            # print(size,clabel,type(size))
+            # mm=label.text()
+            # print(mm,label)
+            mm=self.d_lab[clabel]
+            size=round(size/100,2)
+            self.d_label[mm.lower()]=size
+            size=str(size)
+            clabel.setText(size)
+            # clabel.setFont(QFont("Arial", size))
+        
         for label in noises:
+            # print(label,type(label))
             layout = QHBoxLayout()
+            cslider=QSlider(Qt.Horizontal)
+            cslider.setRange(1,100)
+            cslider.setValue(50)
+            cslider.setTickPosition(QSlider.TicksBelow)
+            cslider.setTickInterval(1)
+            clabel = QLabel("")
+            
             checkbox = QCheckBox(label, self)
             self.labels.append(checkbox)
             self.chkbxs.append(checkbox)
-            title_v_box.addWidget(checkbox)
-            title_v_box.setStretchFactor(checkbox, 0)
+            
+            self.d_lab[clabel]=label
+            # cslider.valueChanged.connect(valuechange)
+            cslider.valueChanged.connect(lambda value, clabel=clabel: valuechange(self,value, clabel))
+            
             layout.addWidget(checkbox)
+            layout.addWidget(cslider)
+            layout.addWidget(clabel)
+            
+            
+            title_v_box.addLayout(layout)
+            title_v_box.setStretchFactor(layout, 0)
+            
+            
             title_v_box.addStretch(10)
             liders = {}
             
@@ -381,6 +407,9 @@ class Project(QWidget):
                 for widget in self.chkbxs:
                         if isinstance(widget, QCheckBox) and widget.isChecked():
                             label = widget.text().lower()
+                            print(label,self.d_label)
+                            value_im=self.d_label.get(label,0.50)
+                            print(value_im,self.d_label)
                             # print(noise)
                             filter_func_name = label
                             generated_images = []
@@ -391,7 +420,8 @@ class Project(QWidget):
                                 # form = Image.open(image).format
                                 if(image.endswith(".png") or image.endswith(".jpg") or image.endswith(".jpeg")):
                                 # print(image,'ds')
-                                    generated_images.append(globals()[filter_func_name](image))
+                                    print(value_im)
+                                    generated_images.append(globals()[filter_func_name](image,value_im))
                                 else:
                                     globals()['v'+filter_func_name](image,i+1)
                             i = 0
