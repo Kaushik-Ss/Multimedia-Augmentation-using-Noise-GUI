@@ -79,7 +79,7 @@ sepearator='-'
 
 def count_files():
     try:
-        os.mkdir(os.getcwd()+"/output/thumbnail_new/")
+        os.mkdir(os.getcwd()+"/output/thumbnail_dir/")
     except:
         pass
     lis=[]
@@ -95,7 +95,7 @@ count_files()
 def save_image_generated(generated_image,label):
     get_current_label[label]=get_current_label.get(label,0)+1
     output_filename = f'output/{label}{sepearator}{get_current_label[label]}.jpg'
-    print(output_filename,'created')
+    # print(output_filename,'created')
     cv2.imwrite(output_filename, generated_image)
     
 
@@ -373,8 +373,8 @@ class Project(QWidget):
             liders = {}
             
             def updateLabel(label, value):
-                    print(liders)
-                    print(liders[label])        
+                    # print(liders)
+                    # print(liders[label])        
                     liders[label].setText(str(value))
 
         title_v_box.addLayout(title_h_box_a)     
@@ -421,7 +421,7 @@ class Project(QWidget):
                   
     def submit(self):
         if len(self.addedimages) == 0:
-            print('Please enter')
+            print('Please add image')
             ret = QMessageBox.question(self, 'Critical', "Add Images!", QMessageBox.Ok, QMessageBox.Cancel)
             if ret==QMessageBox.Ok:
                 pass
@@ -435,7 +435,7 @@ class Project(QWidget):
         
         import timeit
         start = timeit.default_timer()
-        print(start)
+        # print(start)
 
         results = {}
 
@@ -443,9 +443,9 @@ class Project(QWidget):
                 for widget in self.chkbxs:
                         if isinstance(widget, QCheckBox) and widget.isChecked():
                             label = widget.text().lower()
-                            print(label,self.d_label)
+                            # print(label,self.d_label)
                             value_im=self.d_label.get(label,0.50)
-                            print(value_im,self.d_label)
+                            # print(value_im,self.d_label)
                             # print(noise)
                             filter_func_name = label
                             generated_images = []
@@ -454,11 +454,11 @@ class Project(QWidget):
                             i = 0
                             for image in self.addedimages:
                                 if len(image)>0:
-                                    print(image,self.addedimages,'--')
+                                    # print(image,self.addedimages,'--')
                                     # form = Image.open(image).format
                                     if isimage(image):
                                     # print(image,'ds')
-                                        print(value_im)
+                                        # print(value_im)
                                         generated_images.append(globals()[filter_func_name](image,value_im))
                                     else:
                                         globals()['v'+filter_func_name](image,i+1,value_im)
@@ -471,7 +471,7 @@ class Project(QWidget):
 
         # print('Running')
         for label, future in results.items():
-                                print(label, future)
+                                # print(label, future)
                                 if future.done():
                                     time_taken = timeit.timeit(lambda: future.result(), number=1)
                                     print(f"Time taken for '{label}': {time_taken:.6f} seconds")
@@ -541,17 +541,15 @@ class Project(QWidget):
                 c=0
                 max_r=3
                 r=0
-                print(os.getcwd()+folder_dir)
+                # print(os.getcwd()+folder_dir)
 
                 for image in os.listdir(os.getcwd()+folder_dir):
-                    output_loc=os.getcwd()+'/'+f'output/thumbnail_new/{image}'
+                    output_loc=os.getcwd()+'/'+f'output/thumbnail_dir/{image}'
                     if not os.path.exists(output_loc):
                         # print(os.getcwd()+"/"+image,'--')  
                         # print('dsddss')   
-                        thumb_dir=os.getcwd()+folder_dir+'thumbnail_new'
-                        isExist = os.path.exists(thumb_dir)
-                        if not isExist:
-                                        os.makedirs(thumb_dir)
+                        thumb_dir=os.getcwd()+folder_dir+'thumbnail_dir'
+                        
                         # print(image,os.getcwd(),'pls')         
                         label_name=os.getcwd()+folder_dir+"/"+str(image)
                         
@@ -559,8 +557,8 @@ class Project(QWidget):
                                 create_thumbnail(label_name,output_loc)
                         except Exception as e:
                             print(e,'Unable to add thumbnail for',image)
-                print(os.getcwd())
-                for image in os.listdir(os.getcwd()+"/output/thumbnail_new/"):
+                # print(os.getcwd())
+                for image in os.listdir(os.getcwd()+"/output/thumbnail_dir/"):
                         k=''
                         if image.find('__vid__')>0:
                             k=image.replace('__vid__',"")
@@ -569,8 +567,8 @@ class Project(QWidget):
                         
                         if os.path.exists(os.getcwd()+"/output/"+image) or k:
                             small_grid=QGridLayout()
-                            self.name_image=os.path.join(os.getcwd()+"/output/thumbnail_new/",image)
-                            print(image)
+                            self.name_image=os.path.join(os.getcwd()+"/output/thumbnail_dir/",image)
+                            # print(image)
                             if image.find('__vid__')>0:
                                 k=image.replace('__vid__',"")
                                 image=k.replace('.jpg',".mp4")
@@ -629,7 +627,7 @@ class Project(QWidget):
 
     def add_image(self):
         self.file_names,_ = QFileDialog.getOpenFileNames(self, 'Open File', "/Users/user_name/Desktop/","All Files (*);;Text Files (*.txt)")
-        print(self.file_names)
+        # print(self.file_names)
         if len(self.file_names)==0:
             self.addedimages.append(self.file_names)
         else:
@@ -659,13 +657,13 @@ class Project(QWidget):
     def set_image(self, file_path):
         self.addedimages.append(file_path)
         pixmap=QPixmap(file_path)
-        print(file_path)
+        # print(file_path)
         pixmap=pixmap.scaled(self.photoViewer.width(), self.photoViewer.height(), Qt.KeepAspectRatio, Qt.FastTransformation)
         pixmap.mousePressEvent = self.openImage
         self.photoViewer.setPixmap(pixmap)
         
     def openImage(self, file_dir): 
-        print(file_dir) 
+        # print(file_dir) 
         QDesktopServices.openUrl(QUrl.fromLocalFile(file_dir))
 
 if __name__ == '__main__':
