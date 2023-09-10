@@ -79,7 +79,9 @@ sepearator='-'
 
 def count_files():
     try:
+        os.mkdir(os.getcwd()+"/output")
         os.mkdir(os.getcwd()+"/output/thumbnail_dir/")
+        
     except:
         pass
     lis=[]
@@ -498,31 +500,37 @@ class Project(QWidget):
                 widget.setChecked(False)
             else:
                 widget.setChecked(True)
-            
+    
     def styles(self):
-        font_loc="fonts/GothamMedium_1.ttf"
-        font_id = QFontDatabase.addApplicationFont(font_loc)
-        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-        font = QFont(font_family)
-        font.setPointSize(8)
-        font.setItalic(True)
+        try:
+            font_loc="fonts/GothamMedium_1.ttf"
+            font_id = QFontDatabase.addApplicationFont(font_loc)
+            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+            font = QFont(font_family)
+            font.setPointSize(8)
+            font.setItalic(True)
         
-        self.setStyleSheet(
-                           'background-color:#6096B4;'
-                           'font-size: 16pt; font-family: {}; font-weight: italic;'.format(font_family))
-        for widget in self.labels:
-            widget.setFont(font)
-        for widget in self.buttons:
-            widget.setStyleSheet("""
-        QPushButton {
-            background-color: white; 
-        }
-        QPushButton:hover {
-             background-color:green;
-             color:white;
-        }
-        """)
+        
+            self.setStyleSheet(
+                            'background-color:#6096B4;'
+                            'font-size: 16pt; font-family: {}; font-weight: italic;'.format(font_family))
+            for widget in self.labels:
+                widget.setFont(font)
             
+        except:
+            pass
+        finally:
+            for widget in self.buttons:
+                widget.setStyleSheet("""
+            QPushButton {
+                background-color: white; 
+            }
+            QPushButton:hover {
+                background-color:green;
+                color:white;
+            }
+            """)
+                
     def add_image_grid(self):
         if show_preview:
             isExist = os.path.exists(folder_dir)
@@ -668,7 +676,10 @@ class Project(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    id = QFontDatabase.addApplicationFont("fonts/Cubano.ttf")   
-    families = QFontDatabase.applicationFontFamilies(id)[0]
+    try:
+        id = QFontDatabase.addApplicationFont("fonts/Cubano.ttf")   
+        families = QFontDatabase.applicationFontFamilies(id)[0]
+    except:
+        pass
     window = Project()
     sys.exit(app.exec_())

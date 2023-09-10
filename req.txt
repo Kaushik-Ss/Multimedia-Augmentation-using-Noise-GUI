@@ -9,6 +9,5 @@ PyQt5==5.15.9
 PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.2
 PyWavelets==1.4.1
-scikit-image==0.21.0
 scipy==1.11.2
 tifffile==2023.8.30

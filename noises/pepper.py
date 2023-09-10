@@ -1,12 +1,19 @@
 import cv2
 import numpy as np
-from skimage.util import random_noise
+import random
 
-def pepper(imagelocation,value):
-    amountrange = value
-    img = cv2.imread(imagelocation)
-    noise_img = random_noise(img, mode='pepper',amount=amountrange)
-    noise_img = np.array(255*noise_img, dtype = 'uint8')
-    return noise_img
+def pepper(img_path, value):
+    salt_prob=pepper_prob=value
+    img = cv2.imread(img_path)
+    height, width, _ = img.shape
+    num_salt = int(height * width * salt_prob)
+    num_pepper = int(height * width * pepper_prob)
 
-# peppernoise(r"C:\Users\fredd\Documents\GitHub\Prism-gui-image-augment\images\image-25.jpg",0.3)
+    for _ in range(num_salt):
+        y, x = random.randint(0, height - 1), random.randint(0, width - 1)
+        img[y, x] = [255, 255, 255]  
+
+    for _ in range(num_pepper):
+        y, x = random.randint(0, height - 1), random.randint(0, width - 1)
+        img[y, x] = [0, 0, 0]  
+    return img
