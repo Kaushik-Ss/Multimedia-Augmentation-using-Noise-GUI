@@ -643,6 +643,12 @@ class Project(QWidget):
             event.ignore()
 
     def dropEvent(self, event):
+        """
+    Handle drop event to add dropped images to the grid.
+    
+    Parameters:
+    - event (QDropEvent): The drop event.
+    """
         if event.mimeData().hasImage:
             event.setDropAction(Qt.CopyAction)
             file_path = event.mimeData().urls()[0].toLocalFile()
