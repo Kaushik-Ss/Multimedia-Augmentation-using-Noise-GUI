@@ -1,5 +1,5 @@
 # Image-augmentation - Hassle free way to increase Dataset size
-https://www.youtube.com/watch?v=6JQuTVdgvY4
+Demo link - https://www.youtube.com/watch?v=6JQuTVdgvY4
 ### Requirements specified by SAMSUNG R&D India
 ## Inspiration
 Came up with the idea when playing with filters in snapchat as filter can be added and swapped out without needing to capcute the entire image again with a new filter.
